@@ -1,0 +1,85 @@
+﻿@page "/"
+@using WhatsUpDocx.Services
+
+<h3>Index</h3>
+
+<InputFile OnChange="LoadFiles" multiple />
+
+@inject AssistantsApiService AssistantsApiService
+@code {
+    Document MyDocument = null!;
+    string UploadResult = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        MyDocument = await Api.Documents.Create();
+        var files = await AssistantsApiService.GetFilesAsync();
+        var file = await AssistantsApiService.GetFileAsync("file-Lb1L8TJPD5J8XZrgpD63m7");
+
+        var tempFileId = "file-Lb1L8TJPD5J8XZrgpD63m7";
+        var tempThreadId = "thread_6IRpNpAcL3NVSGGiBVkH6Xra";
+        var assistantId = "asst_PmXhBmnjbGFNKOZCNt0uRefe";
+        var runId = "run_JB0lQ5ldBqL4UWi4XkMoLRat";
+
+        // var thread = await AssistantsApiService.CreateThreadAsync();
+        // var threadId = "abc";
+
+        // var ok = await AssistantsApiService.CreateMessageAsync(tempThreadId, tempFileId);
+
+
+
+        // var result = await AssistantsApiService.CreateRunAsync(tempThreadId, assistantId);
+        var messages = await AssistantsApiService.GetMessagesAsync(tempThreadId);
+        var runs = await AssistantsApiService.GetRunsAsync(tempThreadId);
+
+        var run = await AssistantsApiService.GetRunAsync(tempThreadId, runId);
+
+        // var thread = await AssistantsApiService.CreateThreadWithMessageAndFileAsync(tempFileId);
+        // var tempThread = await AssistantsApiService.GetThreadAsync("thread_zobYs1LSF1xL0ufYaajhD3FY");
+        var test = "abc";
+    }
+
+    private async void LoadFiles(InputFileChangeEventArgs e)
+    {
+        var abcd = e.File;
+
+        var fileId = await UploadFiles(e.File);
+
+        
+        // var result = await AssistantsApiService.CreateThreadAsync();
+        // var threadId = "thread_oN3rRNwo6uxayRAnAVzgOwv0";
+        // var thread = await AssistantsApiService.GetThreadAsync(threadId);
+        // var tempFileId = "file-Lb1L8TJPD5J8XZrgpD63m7";
+        // var thread = await AssistantsApiService.CreateThreadWithMessageAndFileAsync(tempFileId);
+
+        var teste = "abc";
+    }
+
+    private async Task<string> UploadFiles(IBrowserFile file)
+    {
+        try
+        {
+            // Get the first file (you can also handle multiple)
+            if (file == null)
+            {
+                UploadResult = "No file was selected.";
+                return "abc";
+            }
+
+            // Call your new method to upload to OpenAI
+            var response = await AssistantsApiService.UploadFileAsync(file);
+
+            // Save result so you can display it
+            UploadResult = response;
+            return response;
+        }
+        catch (Exception ex)
+        {
+            UploadResult = $"Error: {ex.Message}";
+            return "abc";
+        }
+    }
+
+    // async Task MultiplyBy2() => await MyCounter.MultiplyBy(2);
+    // async Task MultiplyBy5() => await MyCounter.MultiplyBy(5);
+}

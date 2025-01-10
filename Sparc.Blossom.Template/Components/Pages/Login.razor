@@ -1,0 +1,39 @@
+@page "/login"
+@inject SparcWeek2025.Services.AuthenticationService AuthService
+@inject NavigationManager NavigationManager
+
+<h3>Login</h3>
+
+<div>
+    <label>Username:</label>
+    <input @bind="Username" type="text" />
+</div>
+<div>
+    <label>Password:</label>
+    <input @bind="Password" type="password" />
+</div>
+<button @onclick="HandleLogin">Login</button>
+
+<p>@Message</p>
+
+@code {
+    private string Username { get; set; } = string.Empty;
+    private string Email { get; set; } = string.Empty;
+    private string Password { get; set; } = string.Empty;
+    private string Message { get; set; } = string.Empty;
+
+
+    private async Task HandleLogin()
+    {
+        bool success = await AuthService.LoginAsync(Username, Password);
+        if (success)
+        {
+            Message = "Login successful!";
+            NavigationManager.NavigateTo("/");
+        }
+        else
+        {
+            Message = "Invalid username or password.";
+        }
+    }
+}

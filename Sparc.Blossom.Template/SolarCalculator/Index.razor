@@ -1,0 +1,110 @@
+﻿@page "/"
+
+<PageTitle>Solar Calculator</PageTitle>
+
+<h3>Solar Calculator</h3>
+
+
+<EditForm Model="@formModel" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div>
+        <label for="email">Email:</label>
+        <InputText id="email" @bind-Value="formModel.Email" />
+    </div>
+    <div>
+        <label for="address">Address:</label>
+        <InputText id="address" @bind-Value="formModel.Address" />
+    </div>
+    <div>
+        <label for="type">Type:</label>
+        <InputSelect id="type" @bind-Value="formModel.Type">
+            <option value="Residential">Residential</option>
+            <option value="Commercial">Commercial</option>
+        </InputSelect>
+    </div>
+    <div>
+        <label for="avgMonthlyBill">Avg Monthly Electricity Bill:</label>
+        <InputNumber id="avgMonthlyBill" @bind-Value="formModel.AvgMonthlyBill" />
+    </div>
+    <button type="submit">Submit</button>
+</EditForm>
+
+
+@inject IJSRuntime JSRuntime
+@inject IConfiguration Configuration
+
+@code {
+    private FormModel formModel = new FormModel();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await LoadCurrentAddressAsync();
+        }
+    }
+
+    private void HandleValidSubmit()
+    {
+        // Handle the form submission
+    }
+
+    public class FormModel
+    {
+        public string Email { get; set; }
+        public string Address { get; set; }
+        public string Type { get; set; }
+        public decimal AvgMonthlyBill { get; set; }
+    }
+
+    private async Task LoadCurrentAddressAsync()
+    {
+        try
+        {
+            var position = await JSRuntime.InvokeAsync<Position>("geoLocationInterop.getCurrentPosition");
+            var latitude = position.latitude;
+            var longitude = position.longitude;
+
+            formModel.Address = await GetAddressAsync(latitude, longitude);
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error retrieving location: {ex.Message}");
+        }
+    }
+
+    private async Task<string> GetAddressAsync(double latitude, double longitude)
+    {
+        using var httpClient = new HttpClient();
+        var apiKey = Configuration["GoogleMaps:ApiKey"];
+        var url = $"https://maps.googleapis.com/maps/api/geocode/json?latlng={latitude},{longitude}&key={apiKey}";
+
+        var response = await httpClient.GetFromJsonAsync<GoogleGeocodeResponse>(url);
+        if (response?.results?.Any() == true)
+        {
+            return response.results.First().formatted_address;
+        }
+
+        return "Address not found";
+    }
+
+    public class GoogleGeocodeResponse
+    {
+        public List<GoogleGeocodeResult> results { get; set; }
+    }
+
+    public class GoogleGeocodeResult
+    {
+        public string formatted_address { get; set; }
+    }
+
+
+    public class Position
+    {
+        public double latitude { get; set; }
+        public double longitude { get; set; }
+    }
+}

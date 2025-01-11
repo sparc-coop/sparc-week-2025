@@ -1,0 +1,27 @@
+﻿<EditForm Model="@menteeModel">
+    <div class="form-group">
+        <label for="interests">Choose your interests</label>
+        <select id="interests" name="interests" multiple @bind="menteeModel.Interests">
+            <option value="personal_growth">Personal Growth</option>
+            <option value="career">Career</option>
+            <option value="health">Health</option>
+            <option value="technology">Technology</option>
+            <option value="education">Education</option>
+            <option value="entrepreneurship">Entrepreneurship</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="preferredTimes">Preferred Times</label>
+        <select id="preferredTimes" name="preferredTimes" multiple @bind="menteeModel.PreferredTimes" class="form-control">
+            <option value="morning">Morning</option>
+            <option value="afternoon">Afternoon</option>
+            <option value="evening">Evening</option>
+            <option value="night">Night</option>
+        </select>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter] public Mentee menteeModel { get; set; }    
+}

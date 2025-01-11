@@ -1,0 +1,28 @@
+﻿<EditForm Model="@mentorModel">
+    <div class="form-group">
+        <label for="expertise">Choose your area of expertise</label>
+        <select id="expertise" name="expertise" multiple @bind="mentorModel.Expertise">
+            <option value="software_development">Software Development</option>
+            <option value="project_management">Project Management</option>
+            <option value="leadership">Leadership</option>
+            <option value="marketing">Marketing</option>
+            <option value="design">Design</option>
+            <option value="finance">Finance</option>
+        </select>
+    </div>
+
+    <div class="form-group">        
+        <label for="availableTimes">Available Times</label>
+        <select id="preferredTimes" name="preferredTimes" multiple @bind="mentorModel.AvailableTimes" class="form-control">
+            <option value="morning">Morning</option>
+            <option value="afternoon">Afternoon</option>
+            <option value="evening">Evening</option>
+            <option value="night">Night</option>
+        </select>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter] public Mentor mentorModel { get; set; }
+}
+

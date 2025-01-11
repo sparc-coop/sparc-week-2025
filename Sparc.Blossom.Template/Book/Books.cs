@@ -1,4 +1,4 @@
-﻿namespace Sparc.Blossom.Template.Books;
+﻿namespace Sparc.Blossom.Girassol.Books;
 
 public class Books(BlossomAggregateOptions<Book> options) : BlossomAggregate<Book>(options)
 {

@@ -1,4 +1,4 @@
-﻿namespace Sparc.Blossom.Template.SolarPlant;
+﻿namespace Sparc.Blossom.Girassol.SolarPlant;
 
 public class SolarPlant : BlossomEntity<string>
 {

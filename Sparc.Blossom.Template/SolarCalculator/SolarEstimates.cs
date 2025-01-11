@@ -1,4 +1,4 @@
-﻿namespace Sparc.Blossom.Template.Estimates;
+﻿namespace Sparc.Blossom.Girassol.Estimates;
 
 public class SolarEstimates(BlossomAggregateOptions<SolarEstimate> options) : BlossomAggregate<SolarEstimate>(options)
 {

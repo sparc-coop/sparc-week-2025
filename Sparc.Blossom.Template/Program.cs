@@ -1,4 +1,4 @@
-using Sparc.Blossom.Template;
+using Sparc.Blossom.Girassol;
 
 var builder = BlossomApplication.CreateBuilder(args);
 
@@ -8,5 +8,7 @@ var app = builder.Build();
 using var scope = app.Services.CreateScope();
 var forecastRepository = scope.ServiceProvider.GetRequiredService<IRepository<Forecast>>();
 await forecastRepository.AddAsync(Forecast.Generate(60));
+
+//TODO generate plants and estimates
 
 await app.RunAsync<Html>();

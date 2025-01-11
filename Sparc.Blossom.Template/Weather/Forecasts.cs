@@ -1,4 +1,4 @@
-﻿namespace Sparc.Blossom.Template;
+﻿namespace Sparc.Blossom.Girassol;
 
 public class Forecasts(BlossomAggregateOptions<Forecast> options) : BlossomAggregate<Forecast>(options)
 {

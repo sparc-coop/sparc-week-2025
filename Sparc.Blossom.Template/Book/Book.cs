@@ -1,4 +1,4 @@
-﻿namespace Sparc.Blossom.Template.Books;
+﻿namespace Sparc.Blossom.Girassol.Books;
 
 public class Book : BlossomEntity<string>
 {

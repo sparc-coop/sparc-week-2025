@@ -1,4 +1,4 @@
-﻿namespace Sparc.Blossom.Template.Estimates;
+﻿namespace Sparc.Blossom.Girassol.Estimates;
 
 public class SolarEstimate : BlossomEntity<string>
 {

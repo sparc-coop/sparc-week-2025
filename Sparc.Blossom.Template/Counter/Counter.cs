@@ -1,4 +1,4 @@
-﻿namespace Sparc.Blossom.Template.Counters;
+﻿namespace Sparc.Blossom.Girassol.Counters;
 
 public class Counter : BlossomEntity<string>
 {

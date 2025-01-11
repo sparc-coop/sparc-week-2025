@@ -2,6 +2,33 @@
 
 <h3>Estimates</h3>
 
-@code {
+<table>
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Address</th>
+            <th>Type</th>
+            <th>Avg Monthly Eletricity Bill</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var estimate in estimates)
+        {
+            <tr>
+                <td>@estimate.Email</td>
+                <td>@estimate.Address</td>
+                <td>@estimate.Type</td>
+                <td>@estimate.AvgMonthlyEletricityBill</td>
+            </tr>
+        }
+    </tbody>
+</table>
 
+@code {
+    private List<SolarEstimate> estimates = new List<SolarEstimate>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        estimates = (await Api.SolarEstimates.Filter(null, null, null, null, null, null)).ToList();
+    }
 }

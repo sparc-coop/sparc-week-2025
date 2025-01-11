@@ -1,4 +1,4 @@
-﻿namespace Sparc.Blossom.Template.SolarCalculator;
+﻿namespace Sparc.Blossom.Template.Estimates;
 
 public class SolarEstimate : BlossomEntity<string>
 {

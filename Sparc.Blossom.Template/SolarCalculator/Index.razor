@@ -5,28 +5,28 @@
 <h3>Solar Calculator</h3>
 
 
-<EditForm Model="@formModel" OnValidSubmit="@HandleValidSubmit">
+<EditForm Model="@newEstimate" OnValidSubmit="@HandleValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
     <div>
         <label for="email">Email:</label>
-        <InputText id="email" @bind-Value="formModel.Email" />
+        <InputText id="email" @bind-Value="newEstimate.Email" />
     </div>
     <div>
         <label for="address">Address:</label>
-        <InputText id="address" @bind-Value="formModel.Address" />
+        <InputText id="address" @bind-Value="newEstimate.Address" />
     </div>
     <div>
         <label for="type">Type:</label>
-        <InputSelect id="type" @bind-Value="formModel.Type">
+        <InputSelect id="type" @bind-Value="newEstimate.Type">
             <option value="Residential">Residential</option>
             <option value="Commercial">Commercial</option>
         </InputSelect>
     </div>
     <div>
-        <label for="avgMonthlyBill">Avg Monthly Electricity Bill:</label>
-        <InputNumber id="avgMonthlyBill" @bind-Value="formModel.AvgMonthlyBill" />
+        <label for="avgMonthlyEletricityBill">Avg Monthly Electricity Bill:</label>
+        <InputNumber id="avgMonthlyEletricityBill" @bind-Value="newEstimate.AvgMonthlyEletricityBill" />
     </div>
     <button type="submit">Submit</button>
 </EditForm>
@@ -36,7 +36,7 @@
 @inject IConfiguration Configuration
 
 @code {
-    private FormModel formModel = new FormModel();
+    private SolarEstimate newEstimate = new SolarEstimate();
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -46,17 +46,9 @@
         }
     }
 
-    private void HandleValidSubmit()
+    private async void HandleValidSubmit()
     {
-        // Handle the form submission
-    }
-
-    public class FormModel
-    {
-        public string Email { get; set; }
-        public string Address { get; set; }
-        public string Type { get; set; }
-        public decimal AvgMonthlyBill { get; set; }
+        await Api.SolarEstimates.Create(newEstimate.Email, newEstimate.Address, newEstimate.Type, newEstimate.AvgMonthlyEletricityBill);
     }
 
     private async Task LoadCurrentAddressAsync()
@@ -67,7 +59,7 @@
             var latitude = position.latitude;
             var longitude = position.longitude;
 
-            formModel.Address = await GetAddressAsync(latitude, longitude);
+            newEstimate.Address = await GetAddressAsync(latitude, longitude);
             StateHasChanged();
         }
         catch (Exception ex)

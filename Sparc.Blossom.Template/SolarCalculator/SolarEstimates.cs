@@ -1,4 +1,4 @@
-﻿namespace Sparc.Blossom.Template.SolarCalculator;
+﻿namespace Sparc.Blossom.Template.Estimates;
 
 public class SolarEstimates(BlossomAggregateOptions<SolarEstimate> options) : BlossomAggregate<SolarEstimate>(options)
 {
@@ -31,6 +31,9 @@ public class SolarEstimates(BlossomAggregateOptions<SolarEstimate> options) : Bl
         {
             query = query.Where(x => x.AvgMonthlyEletricityBill <= maxBill.Value);
         }
+
+        page ??= 1;
+        perPage ??= 10;
 
         return query.SkipTake(page.Value * perPage.Value, perPage.Value); ;
     }

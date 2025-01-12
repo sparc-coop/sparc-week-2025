@@ -1,7 +1,72 @@
 ﻿@page "/"
+@using Sparc.Blossom.Template.Common
 
-<PageTitle>Home</PageTitle>
+<PageTitle>User Registration</PageTitle>
 
-<h1>Hello, world!</h1>
+<h3 class="text-center my-4">User Registration</h3>
 
-Welcome to your new app.
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-body">
+                    <EditForm Model="@user" OnValidSubmit="@HandleValidSubmit">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary class="alert alert-danger" />
+
+                        <div class="mb-3">
+                            <label for="firstName" class="form-label">First Name</label>
+                            <InputText id="firstName" class="form-control" @bind-Value="user.FirstName" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="lastName" class="form-label">Last Name</label>
+                            <InputText id="lastName" class="form-control" @bind-Value="user.LastName" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <InputText id="email" class="form-control" @bind-Value="user.Email" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Phone</label>
+                            <InputText id="phone" class="form-control" @bind-Value="user.Phone" />
+                        </div>
+
+                        <div class="row">
+                            <h5 class="mt-4">Register As</h5>
+                            <InputRadioGroup @bind-Value="user.UserType" class="d-flex align-items-center gap-3 mt-3">
+                                <div class="form-check">
+                                    <InputRadio Value="UserType.Doctor" class="form-check-input" id="doctor" />
+                                    <label for="doctor" class="form-check-label">Doctor</label>
+                                </div>
+                                <div class="form-check">
+                                    <InputRadio Value="UserType.Patient" class="form-check-input" id="patient" />
+                                    <label for="patient" class="form-check-label">Patient</label>
+                                </div>
+                            </InputRadioGroup>
+                        </div>
+
+                        <div class="mt-4 text-center">
+                            <button type="submit" class="btn btn-primary w-100">Submit</button>
+                        </div>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@inject NavigationManager Nav
+@inject Sparc.Blossom.Template.Aggregaters.UserAggregate _userAggregate
+
+@code {
+    private Sparc.Blossom.Template.Entities.User user = new Sparc.Blossom.Template.Entities.User();
+
+    private async Task HandleValidSubmit()
+    {
+        await _userAggregate.Create(user);
+        Nav.NavigateTo("/appointments");
+    }
+}

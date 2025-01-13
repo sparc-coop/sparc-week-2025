@@ -1,0 +1,57 @@
+﻿@page "/create-doctor"
+@using Sparc.Blossom.Template.Entities
+@inject Sparc.Blossom.Template.Aggregaters.DoctorAggregate _doctorAggregate
+@inject NavigationManager Nav
+
+<PageTitle>Create Doctor</PageTitle>
+
+<h3 class="text-center my-4">Create Doctor</h3>
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-body">
+                    <EditForm Model="@doctor" OnValidSubmit="@HandleValidSubmit">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary class="alert alert-danger" />
+
+                        <div class="mb-3">
+                            <label for="fullName" class="form-label">Full Name</label>
+                            <InputText id="fullName" class="form-control" @bind-Value="doctor.FullName" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <InputText id="email" class="form-control" @bind-Value="doctor.Email" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Phone</label>
+                            <InputText id="phone" class="form-control" @bind-Value="doctor.Phone" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="specialty" class="form-label">Specialty</label>
+                            <InputText id="specialty" class="form-control" @bind-Value="doctor.Specialty" />
+                        </div>
+
+                        <div class="mt-4 text-center">
+                            <button type="submit" class="btn btn-primary w-100">Submit</button>
+                        </div>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private Doctor doctor = new Doctor();
+
+    private async Task HandleValidSubmit()
+    {
+        await _doctorAggregate.Create(doctor);
+        Nav.NavigateTo("/doctors");
+    }
+}

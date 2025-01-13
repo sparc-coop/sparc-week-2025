@@ -1,0 +1,69 @@
+﻿@page "/doctors"
+@using Sparc.Blossom.Template.Entities
+@inject Sparc.Blossom.Template.Aggregaters.UserAggregate _doctorAggregate
+@inject NavigationManager Nav
+
+<PageTitle>Doctors List</PageTitle>
+
+<h3 class="text-center my-4">Doctors List</h3>
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-body">
+                    @if (doctors == null)
+                    {
+                        <p>Loading...</p>
+                    }
+                    else if (doctors.Count == 0)
+                    {
+                        <p>No doctors available at the moment.</p>
+                    }
+                    else
+                    {
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Specialty</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var doctor in doctors)
+                                {
+                                    <tr>
+                                        <td>@doctor.FullName</td>
+                                        <td>@doctor.Email</td>
+                                        <td>@doctor.Phone</td>
+                                        <td>@doctor.Specialty</td>
+                                        @* <td>
+                                            <button class="btn btn-info" @onclick="() => ViewDetails(doctor.Id)">View Details</button>
+                                        </td> *@
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<user> doctors;
+
+    protected override async Task OnInitializedAsync()
+    {
+        doctors = await _doctorAggregate.GetAllDoctors();
+    }
+
+    private void ViewDetails(int doctorId)
+    {
+        Nav.NavigateTo($"/doctor/{doctorId}");
+    }
+}

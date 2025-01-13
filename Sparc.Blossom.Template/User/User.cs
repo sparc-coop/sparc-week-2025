@@ -1,5 +1,5 @@
-﻿using Sparc.Blossom.Template.Mentors;
-using Sparc.Blossom.Template.Mentees;
+﻿using Sparc.Blossom.Template.MentorsProfile;
+using Sparc.Blossom.Template.MenteesProfile;
 
 namespace Sparc.Blossom.Template.Users;
 

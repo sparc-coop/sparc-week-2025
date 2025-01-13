@@ -25,31 +25,33 @@
     </div>
 
     <h4>Select the profile(s) you want to fill out</h4>
-    <div class="form-check">
-        <InputRadio id="isMentor" class="form-check-input" @bind-Value="profileType" />
-        <label class="form-check-label" for="isMentor">
-            Mentor
-        </label>
-    </div>
-    <div class="form-check">
-        <InputRadio id="isMentee" class="form-check-input" @bind-Value="profileType" />
-        <label class="form-check-label" for="isMentee">
-            Mentee
-        </label>
-    </div>
-    <div class="form-check">
-        <InputRadio id="isBoth" class="form-check-input" @bind-Value="profileType" />
-        <label class="form-check-label" for="isBoth">
-            Both (Mentor and Mentee)
-        </label>
-    </div>
+    <InputRadioGroup @bind-Value="profileType" Name="ProfileType">
+        <div class="form-check">
+            <InputRadio id="isMentor" class="form-check-input" Value="ProfileType.Mentor" />
+            <label class="form-check-label" for="isMentor">
+                Mentor
+            </label>
+        </div>
+        <div class="form-check">
+            <InputRadio id="isMentee" class="form-check-input" Value="ProfileType.Mentee" />
+            <label class="form-check-label" for="isMentee">
+                Mentee
+            </label>
+        </div>
+        <div class="form-check">
+            <InputRadio id="isBoth" class="form-check-input" Value="ProfileType.Both" />
+            <label class="form-check-label" for="isBoth">
+                Both (Mentor and Mentee)
+            </label>
+        </div>
+    </InputRadioGroup>
 
-    @if (profileType == "Mentor" || profileType == "Both")
+    @if (profileType == ProfileType.Mentor || profileType == ProfileType.Both)
     {
         <MentorForm MentorModel="@mentorModel" />
     }
 
-    @if (profileType == "Mentee" || profileType == "Both")
+    @if (profileType == ProfileType.Mentee || profileType == ProfileType.Both)
     {
         <MenteeForm MenteeModel="@menteeModel" />
     }    
@@ -61,25 +63,32 @@
 
 @code {
     private Users.User user = new Users.User(string.Empty, string.Empty, string.Empty);
-    private Mentors.Mentor mentorModel = new Mentors.Mentor(string.Empty, new List<string>(), new List<string>());
-    private Mentees.Mentee menteeModel = new Mentees.Mentee(string.Empty, new List<string>(), new List<string>());
+    private MentorsProfile.Mentor mentorModel = new MentorsProfile.Mentor(string.Empty, new List<string>(), new List<string>());
+    private MenteesProfile.Mentee menteeModel = new MenteesProfile.Mentee(string.Empty, new List<string>(), new List<string>());
 
-    private string profileType;
+    public enum ProfileType
+    {
+        Mentor,
+        Mentee,
+        Both
+    }
 
-    private bool isMentor => profileType == "Mentor" || profileType == "Both";
-    private bool isMentee => profileType == "Mentee" || profileType == "Both";
+    private ProfileType profileType;
+
+    private bool isMentor => profileType == ProfileType.Mentor || profileType == ProfileType.Both;
+    private bool isMentee => profileType == ProfileType.Mentee || profileType == ProfileType.Both;
 
     private async Task HandleValidSubmit()
     {
         await Api.Users.Create(user.FirstName, user.LastName, user.Email);
 
-        if (profileType == "Mentor" || profileType == "Both")
+        if (profileType == ProfileType.Mentor || profileType == ProfileType.Both)
         {
             mentorModel.UserId = user.Id;
             await Api.Mentors.Create(mentorModel.UserId, mentorModel.Expertise, mentorModel.AvailableTimes);
         }
 
-        if (profileType == "Mentee" || profileType == "Both")
+        if (profileType == ProfileType.Mentee || profileType == ProfileType.Both)
         {
             menteeModel.UserId = user.Id;
             await Api.Mentees.Create(menteeModel.UserId, menteeModel.Interests, menteeModel.PreferredTimes);

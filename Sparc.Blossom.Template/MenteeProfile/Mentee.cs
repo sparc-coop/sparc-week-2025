@@ -1,6 +1,6 @@
 ﻿using Sparc.Blossom.Template.Users; 
 
-namespace Sparc.Blossom.Template.Mentees;
+namespace Sparc.Blossom.Template.MenteesProfile;
 
 public class Mentee : BlossomEntity<string>
 {
@@ -8,7 +8,7 @@ public class Mentee : BlossomEntity<string>
     public List<string> Interests { get; set; }
     public List<string> PreferredTimes { get; set; }
 
-    public Users.User User { get; private set; }
+    public User User { get; private set; }
 
     public Mentee(string userId, List<string> interests, List<string> preferredTimes) : base(Guid.NewGuid().ToString())
     {
@@ -27,7 +27,7 @@ public class Mentee : BlossomEntity<string>
         PreferredTimes = newTimes;
     }
 
-    public void SetUser(Users.User user)
+    public void SetUser(User user)
     {
         User = user;
         UserId = user.Id;

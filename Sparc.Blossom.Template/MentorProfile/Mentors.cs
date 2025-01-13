@@ -1,4 +1,4 @@
-﻿namespace Sparc.Blossom.Template.Mentors;
+﻿namespace Sparc.Blossom.Template.MentorsProfile;
 
 public class Mentors(BlossomAggregateOptions<Mentor> options) : BlossomAggregate<Mentor>(options)
 {

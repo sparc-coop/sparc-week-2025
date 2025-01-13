@@ -1,6 +1,6 @@
 ﻿using Sparc.Blossom.Template.Users;
 
-namespace Sparc.Blossom.Template.Mentors;
+namespace Sparc.Blossom.Template.MentorsProfile;
 
 
 public class Mentor : BlossomEntity<string>
@@ -9,7 +9,7 @@ public class Mentor : BlossomEntity<string>
     public List<string> Expertise { get; set; }
     public List<string> AvailableTimes { get; set; }
 
-    public Users.User User { get; private set; }
+    public User User { get; private set; }
 
     public Mentor(string userId, List<string> expertise, List<string> availableTimes) : base(Guid.NewGuid().ToString())
     {
@@ -28,7 +28,7 @@ public class Mentor : BlossomEntity<string>
         AvailableTimes = newTimes;
     }
 
-    public void SetUser(Users.User user)
+    public void SetUser(User user)
     {
         User = user;
         UserId = user.Id;

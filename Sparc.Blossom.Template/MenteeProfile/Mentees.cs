@@ -1,4 +1,4 @@
-﻿namespace Sparc.Blossom.Template.Mentees;
+﻿namespace Sparc.Blossom.Template.MenteesProfile;
 
 public class Mentees(BlossomAggregateOptions<Mentee> options) : BlossomAggregate<Mentee>(options)
 {

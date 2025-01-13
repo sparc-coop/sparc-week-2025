@@ -62,9 +62,9 @@
 @inject NavigationManager Nav
 
 @code {
-    private User user = new User(string.Empty, string.Empty, string.Empty);
-    private Mentor mentorModel = new Mentor(string.Empty, new List<string>(), new List<string>());
-    private Mentee menteeModel = new Mentee(string.Empty, new List<string>(), new List<string>());
+    private User user = new User();
+    private Mentor mentorModel = new Mentor();
+    private Mentee menteeModel = new Mentee();
 
     public enum ProfileType
     {

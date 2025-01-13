@@ -5,10 +5,14 @@ namespace Sparc.Blossom.Template.MenteesProfile;
 public class Mentee : BlossomEntity<string>
 {
     public string UserId { get; set; } 
-    public List<string> Interests { get; set; }
-    public List<string> PreferredTimes { get; set; }
+    public List<string> Interests { get; set; } = new List<string>();
+    public List<string> PreferredTimes { get; set; } = new List<string>();
 
     public User User { get; private set; }
+
+    public Mentee() : base(Guid.NewGuid().ToString())
+    {
+    }
 
     public Mentee(string userId, List<string> interests, List<string> preferredTimes) : base(Guid.NewGuid().ToString())
     {

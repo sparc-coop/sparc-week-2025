@@ -1,7 +1,7 @@
 ﻿<EditForm Model="@menteeModel">
     <div class="form-group">
         <label for="interests">Choose your interests</label>
-        <select id="interests" name="interests" multiple @bind="menteeModel.Interests">
+        <select id="interests" name="interests" multiple @onchange="UpdateInterests">
             <option value="personal_growth">Personal Growth</option>
             <option value="career">Career</option>
             <option value="health">Health</option>
@@ -13,7 +13,7 @@
 
     <div class="form-group">
         <label for="preferredTimes">Preferred Times</label>
-        <select id="preferredTimes" name="preferredTimes" multiple @bind="menteeModel.PreferredTimes" class="form-control">
+        <select id="preferredTimes" name="preferredTimes" multiple @onchange="UpdatePreferredTimes">
             <option value="morning">Morning</option>
             <option value="afternoon">Afternoon</option>
             <option value="evening">Evening</option>
@@ -23,5 +23,17 @@
 </EditForm>
 
 @code {
-    [Parameter] public Mentee menteeModel { get; set; }    
+    [Parameter] public Mentee menteeModel { get; set; }
+
+    private void UpdateInterests(ChangeEventArgs e)
+    {
+        var selectedValues = ((IEnumerable<string>)e.Value).ToList();
+        menteeModel.UpdateInterests(selectedValues);  
+    }
+
+    private void UpdatePreferredTimes(ChangeEventArgs e)
+    {
+        var selectedValues = ((IEnumerable<string>)e.Value).ToList();
+        menteeModel.UpdatePreferredTimes(selectedValues);  
+    }
 }

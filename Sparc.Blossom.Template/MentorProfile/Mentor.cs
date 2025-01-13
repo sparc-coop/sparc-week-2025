@@ -6,10 +6,14 @@ namespace Sparc.Blossom.Template.MentorsProfile;
 public class Mentor : BlossomEntity<string>
 {
     public string UserId { get; set; } 
-    public List<string> Expertise { get; set; }
-    public List<string> AvailableTimes { get; set; }
+    public List<string> Expertise { get; set; } = new List<string>();
+    public List<string> AvailableTimes { get; set; } = new List<string>();
 
     public User User { get; private set; }
+
+    public Mentor() : base(Guid.NewGuid().ToString())
+    {
+    }
 
     public Mentor(string userId, List<string> expertise, List<string> availableTimes) : base(Guid.NewGuid().ToString())
     {

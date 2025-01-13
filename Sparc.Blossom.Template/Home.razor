@@ -48,12 +48,12 @@
 
     @if (profileType == ProfileType.Mentor || profileType == ProfileType.Both)
     {
-        <MentorForm MentorModel="@mentorModel" />
+        <Sparc.Blossom.Template.MentorProfile.MentorForm MentorModel="@mentorModel" />
     }
 
     @if (profileType == ProfileType.Mentee || profileType == ProfileType.Both)
     {
-        <MenteeForm MenteeModel="@menteeModel" />
+        <Sparc.Blossom.Template.MenteeProfile.MenteeForm MenteeModel="@menteeModel" />
     }    
 
     <button type="submit" class="btn btn-primary">Submit</button>
@@ -62,9 +62,9 @@
 @inject NavigationManager Nav
 
 @code {
-    private Users.User user = new Users.User(string.Empty, string.Empty, string.Empty);
-    private MentorsProfile.Mentor mentorModel = new MentorsProfile.Mentor(string.Empty, new List<string>(), new List<string>());
-    private MenteesProfile.Mentee menteeModel = new MenteesProfile.Mentee(string.Empty, new List<string>(), new List<string>());
+    private User user = new User(string.Empty, string.Empty, string.Empty);
+    private Mentor mentorModel = new Mentor(string.Empty, new List<string>(), new List<string>());
+    private Mentee menteeModel = new Mentee(string.Empty, new List<string>(), new List<string>());
 
     public enum ProfileType
     {

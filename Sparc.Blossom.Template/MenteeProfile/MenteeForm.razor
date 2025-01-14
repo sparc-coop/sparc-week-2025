@@ -1,41 +1,81 @@
-﻿<h4>Mente Form</h4>
+﻿<h4>Mentee Form</h4>
 
 <EditForm Model="@menteeModel">
     <div>
-        <label for="interests">Choose your interests</label>
-        <select id="interests" name="interests" multiple @onchange="UpdateInterests">
-            <option value="personal_growth">Personal Growth</option>
-            <option value="career">Career</option>
-            <option value="health">Health</option>
-            <option value="technology">Technology</option>
-            <option value="education">Education</option>
-            <option value="entrepreneurship">Entrepreneurship</option>
-        </select>
+        <label>Choose your interests:</label>
+        <div>
+            @foreach (var interest in InterestsOptions)
+            {
+                <div>
+                    <input type="checkbox" id="@interest" value="@interest" @onchange="(e) => UpdateInterests(e, interest)"
+                           checked="@menteeModel.Interests.Contains(interest)" />
+                    <label for="@interest">@interest</label>
+                </div>
+            }
+        </div>
     </div>
 
     <div>
-        <label for="preferredTimes">Preferred Times</label>
-        <select id="preferredTimes" name="preferredTimes" multiple @onchange="UpdatePreferredTimes">
-            <option value="morning">Morning</option>
-            <option value="afternoon">Afternoon</option>
-            <option value="evening">Evening</option>
-            <option value="night">Night</option>
-        </select>
+        <label>Preferred Times:</label>
+        <div>
+            @foreach (var time in PreferredTimesOptions)
+            {
+                <div>
+                    <input type="checkbox" id="@time" value="@time" @onchange="(e) => UpdatePreferredTimes(e, time)"
+                           checked="@menteeModel.PreferredTimes.Contains(time)" />
+                    <label for="@time">@time</label>
+                </div>
+            }
+        </div>
     </div>
 </EditForm>
 
 @code {
     [Parameter] public Mentee menteeModel { get; set; }
 
-    private void UpdateInterests(ChangeEventArgs e)
+    private List<string> InterestsOptions = new()
     {
-        var selectedValues = ((IEnumerable<string>)e.Value).ToList();
-        menteeModel.UpdateInterests(selectedValues);  
+        "Software Development",
+        "Project Management",
+        "Leadership",
+        "Marketing",
+        "Design",
+        "Finance"
+    };
+    private List<string> PreferredTimesOptions = new()
+    {
+        "Morning",
+        "Afternoon",
+        "Evening"
+    };
+
+    protected override void OnInitialized()
+    {
+        menteeModel.Interests ??= new List<string>();
+        menteeModel.PreferredTimes ??= new List<string>();
     }
 
-    private void UpdatePreferredTimes(ChangeEventArgs e)
+    private void UpdateInterests(ChangeEventArgs e, string interest)
     {
-        var selectedValues = ((IEnumerable<string>)e.Value).ToList();
-        menteeModel.UpdatePreferredTimes(selectedValues);  
+        if (((bool)e.Value) && !menteeModel.Interests.Contains(interest))
+        {
+            menteeModel.Interests.Add(interest);
+        }
+        else if (!((bool)e.Value))
+        {
+            menteeModel.Interests.Remove(interest);
+        }
+    }
+
+    private void UpdatePreferredTimes(ChangeEventArgs e, string time)
+    {
+        if (((bool)e.Value) && !menteeModel.PreferredTimes.Contains(time))
+        {
+            menteeModel.PreferredTimes.Add(time);
+        }
+        else if (!((bool)e.Value))
+        {
+            menteeModel.PreferredTimes.Remove(time);
+        }
     }
 }

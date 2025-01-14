@@ -2,40 +2,81 @@
 
 <EditForm Model="@mentorModel">
     <div>
-        <label for="expertise">Choose your area of expertise</label>
-        <select id="expertise" name="expertise" multiple @onchange="UpdateExpertise">
-            <option value="software_development">Software Development</option>
-            <option value="project_management">Project Management</option>
-            <option value="leadership">Leadership</option>
-            <option value="marketing">Marketing</option>
-            <option value="design">Design</option>
-            <option value="finance">Finance</option>
-        </select>
+        <label>Choose your area of expertise:</label>
+        <div>
+            @foreach (var expertise in ExpertiseOptions)
+            {
+                <div>
+                    <input type="checkbox" id="@expertise" value="@expertise" @onchange="(e) => UpdateExpertise(e, expertise)"
+                           checked="@mentorModel.Expertise.Contains(expertise)" />
+                    <label for="@expertise">@expertise</label>
+                </div>
+            }
+        </div>
     </div>
 
     <div>
-        <label for="availableTimes">Available Times</label>
-        <select id="availableTimes" name="availableTimes" multiple @onchange="UpdateAvailableTimes">
-            <option value="morning">Morning</option>
-            <option value="afternoon">Afternoon</option>
-            <option value="evening">Evening</option>
-        </select>
+        <label>Available Times:</label>
+        <div>
+            @foreach (var time in AvailableTimesOptions)
+            {
+                <div>
+                    <input type="checkbox" id="@time" value="@time" @onchange="(e) => UpdateAvailableTimes(e, time)"
+                           checked="@mentorModel.AvailableTimes.Contains(time)" />
+                    <label for="@time">@time</label>
+                </div>
+            }
+        </div>
     </div>
 </EditForm>
 
 @code {
     [Parameter] public Mentor mentorModel { get; set; }
 
-    private void UpdateExpertise(ChangeEventArgs e)
+    private List<string> ExpertiseOptions = new()
     {
-        var selectedValues = ((IEnumerable<string>)e.Value).ToList();
-        mentorModel.UpdateExpertise(selectedValues);
+        "Software Development",
+        "Project Management",
+        "Leadership",
+        "Marketing",
+        "Design",
+        "Finance"
+    };
+    private List<string> AvailableTimesOptions = new()
+    {
+        "Morning",
+        "Afternoon",
+        "Evening"
+    };
+
+    protected override void OnInitialized()
+    {
+        mentorModel.Expertise ??= new List<string>();
+        mentorModel.AvailableTimes ??= new List<string>();
     }
 
-    private void UpdateAvailableTimes(ChangeEventArgs e)
+    private void UpdateExpertise(ChangeEventArgs e, string expertise)
     {
-        var selectedValues = ((IEnumerable<string>)e.Value).ToList();
-        mentorModel.UpdateAvailableTimes(selectedValues);
+        if (((bool)e.Value) && !mentorModel.Expertise.Contains(expertise))
+        {
+            mentorModel.Expertise.Add(expertise);
+        }
+        else if (!((bool)e.Value))
+        {
+            mentorModel.Expertise.Remove(expertise);
+        }
+    }
+
+    private void UpdateAvailableTimes(ChangeEventArgs e, string time)
+    {
+        if (((bool)e.Value) && !mentorModel.AvailableTimes.Contains(time))
+        {
+            mentorModel.AvailableTimes.Add(time);
+        }
+        else if (!((bool)e.Value))
+        {
+            mentorModel.AvailableTimes.Remove(time);
+        }
     }
 }
 

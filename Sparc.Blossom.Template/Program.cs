@@ -1,4 +1,7 @@
+using System.Configuration;
+using Microsoft.Extensions.Configuration;
 using Sparc.Blossom.Template;
+using Sparc.Blossom.Template.Database;
 
 var builder = BlossomApplication.CreateBuilder(args);
 builder.Services.AddScoped<Microsoft.AspNetCore.Authentication.AuthenticationService>();

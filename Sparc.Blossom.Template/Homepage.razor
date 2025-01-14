@@ -1,6 +1,6 @@
 ﻿@page "/doctors"
 @using Sparc.Blossom.Template.Entities
-@inject Sparc.Blossom.Template.Aggregaters.UserAggregate _doctorAggregate
+@inject Sparc.Blossom.Template.Aggregaters.UserAggregate _userAggregate;
 @inject NavigationManager Nav
 
 <PageTitle>Doctors List</PageTitle>
@@ -36,11 +36,11 @@
                                 @foreach (var doctor in doctors)
                                 {
                                     <tr>
-                                        <td>@doctor.FullName</td>
+                                        <td>@doctor.FirstName</td>
                                         <td>@doctor.Email</td>
                                         <td>@doctor.Phone</td>
-                                        <td>@doctor.Specialty</td>
-                                        @* <td>
+@*                                         <td>@doctor.Specialty</td>
+ *@                                        @* <td>
                                             <button class="btn btn-info" @onclick="() => ViewDetails(doctor.Id)">View Details</button>
                                         </td> *@
                                     </tr>
@@ -55,11 +55,11 @@
 </div>
 
 @code {
-    private List<user> doctors;
+    private List<Sparc.Blossom.Template.Entities.User> doctors;
 
     protected override async Task OnInitializedAsync()
     {
-        doctors = await _doctorAggregate.GetAllDoctors();
+        doctors = await _userAggregate.GetAllDoctorsAsync();
     }
 
     private void ViewDetails(int doctorId)

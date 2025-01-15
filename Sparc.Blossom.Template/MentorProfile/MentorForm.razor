@@ -1,32 +1,30 @@
-﻿<h4>Mentor Form</h4>
+﻿<h3>Mentor Form:</h3>
 
 <EditForm Model="@mentorModel">
     <div>
-        <label>Choose your area of expertise:</label>
-        <div>
-            @foreach (var expertise in ExpertiseOptions)
-            {
-                <div>
-                    <input type="checkbox" id="@expertise" value="@expertise" @onchange="(e) => UpdateExpertise(e, expertise)"
-                           checked="@mentorModel.Expertise.Contains(expertise)" />
-                    <label for="@expertise">@expertise</label>
-                </div>
-            }
-        </div>
+        <label class="title-label">Choose your area of expertise:</label>
+
+        @foreach (var expertise in ExpertiseOptions)        
+        {
+            <div class="input-options">
+                <input type="checkbox" id="@expertise" value="@expertise" @onchange="(e) => UpdateExpertise(e, expertise)"
+                       checked="@mentorModel.Expertise.Contains(expertise)" />
+                <label for="@expertise">@expertise</label>
+            </div>
+        }
     </div>
 
     <div>
-        <label>Available Times:</label>
-        <div>
-            @foreach (var time in AvailableTimesOptions)
-            {
-                <div>
-                    <input type="checkbox" id="@time" value="@time" @onchange="(e) => UpdateAvailableTimes(e, time)"
-                           checked="@mentorModel.AvailableTimes.Contains(time)" />
-                    <label for="@time">@time</label>
-                </div>
-            }
-        </div>
+        <label class="title-label">Available Times:</label>
+
+        @foreach (var time in AvailableTimesOptions)        
+        {
+            <div class="input-options">
+                <input type="checkbox" id="@time" value="@time" @onchange="(e) => UpdateAvailableTimes(e, time)"
+                       checked="@mentorModel.AvailableTimes.Contains(time)" />
+                <label for="@time">@time</label>
+            </div>
+        }
     </div>
 </EditForm>
 

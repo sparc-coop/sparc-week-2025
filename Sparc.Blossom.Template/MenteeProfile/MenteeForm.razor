@@ -1,32 +1,29 @@
-﻿<h4>Mentee Form</h4>
+﻿<h3>Mentee Form:</h3>
 
 <EditForm Model="@menteeModel">
     <div>
-        <label>Choose your interests:</label>
-        <div>
-            @foreach (var interest in InterestsOptions)
-            {
-                <div>
-                    <input type="checkbox" id="@interest" value="@interest" @onchange="(e) => UpdateInterests(e, interest)"
-                           checked="@menteeModel.Interests.Contains(interest)" />
-                    <label for="@interest">@interest</label>
-                </div>
-            }
-        </div>
+        <label class="title-label">Choose your interests:</label>
+
+        @foreach (var interest in InterestsOptions)
+        {
+            <div class="input-options">
+                <input type="checkbox" id="@interest" value="@interest" @onchange="(e) => UpdateInterests(e, interest)"
+                       checked="@menteeModel.Interests.Contains(interest)" />
+                <label for="@interest">@interest</label>
+            </div>
+        }
     </div>
 
     <div>
-        <label>Preferred Times:</label>
-        <div>
-            @foreach (var time in PreferredTimesOptions)
-            {
-                <div>
-                    <input type="checkbox" id="@time" value="@time" @onchange="(e) => UpdatePreferredTimes(e, time)"
-                           checked="@menteeModel.PreferredTimes.Contains(time)" />
-                    <label for="@time">@time</label>
-                </div>
-            }
-        </div>
+        <label class="title-label">Preferred Times:</label>
+
+        @foreach (var time in PreferredTimesOptions)        {
+            <div class="input-options">
+                <input type="checkbox" id="@time" value="@time" @onchange="(e) => UpdatePreferredTimes(e, time)"
+                       checked="@menteeModel.PreferredTimes.Contains(time)" />
+                <label for="@time">@time</label>
+            </div>
+        }
     </div>
 </EditForm>
 

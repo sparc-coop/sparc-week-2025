@@ -1,4 +1,4 @@
-﻿using Sparc.Blossom.Template.Users; 
+﻿using Sparc.Blossom.Template.UserProfile;
 
 namespace Sparc.Blossom.Template.MenteesProfile;
 
@@ -10,6 +10,8 @@ public class Mentee : BlossomEntity<string>
 
     public User User { get; private set; }
 
+    public string AssignedMentorId { get; private set; }
+
     public Mentee() : base(Guid.NewGuid().ToString())
     {
     }
@@ -19,6 +21,16 @@ public class Mentee : BlossomEntity<string>
         UserId = userId;
         Interests = interests;
         PreferredTimes = preferredTimes;
+    }
+
+    public void AssignMentor(string mentorId)
+    {
+        if (string.IsNullOrWhiteSpace(mentorId))
+        {
+            throw new ArgumentException("Mentor ID cannot be null or empty.", nameof(mentorId));
+        }
+
+        AssignedMentorId = mentorId;
     }
 
     public void UpdateInterests(List<string> newInterests)

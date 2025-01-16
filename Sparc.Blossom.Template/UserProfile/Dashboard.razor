@@ -1,0 +1,100 @@
+﻿@page "/dashboard"
+
+<h2>Schedule Your First Meeting</h2>
+
+@if (mentor != null)
+{
+    <div class="period-selection">
+        <p>Select a period:</p>
+        @foreach (var period in mentor.AvailableTimes)
+        {
+            <button @* @onclick="() => SelectPeriod(period)" *@>@period</button>
+        }
+    </div>
+
+    @if (availableSlots != null && availableSlots.Any())
+    {
+        <ul class="time-slots">
+            @foreach (var slot in availableSlots)
+            {
+                <li>
+                    <button @onclick="() => SelectTimeSlot(slot)">@slot</button>
+                </li>
+            }
+        </ul>
+    }
+    else if (!string.IsNullOrEmpty(selectedPeriod))
+    {
+        <p>No available slots in the selected period.</p>
+    }
+}
+
+<button @onclick="ConfirmAppointment" disabled="@(!canConfirm)">Confirm Appointment</button>
+
+<div class="instructions">
+    <h3>How to Prepare for Your First Meeting</h3>
+    <ul>
+        <li>Introduce yourself and explain your goals.</li>
+        <li>
+            Prepare questions like:
+            <ul>
+                <li>What are the key skills I should focus on?</li>
+                <li>What tools or resources do you recommend?</li>
+            </ul>
+        </li>
+        <li>Review any materials or topics provided by the mentor.</li>
+    </ul>
+</div>
+
+@code {
+    private Mentor mentor;
+    private string selectedPeriod;
+    private List<string> availableSlots;
+    private string selectedSlot;
+    private bool canConfirm;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (string.IsNullOrEmpty(MentorService.SelectedMentorId))
+        {
+            Nav.NavigateTo("/mentors");
+            return;
+        }
+
+        var mentorId = MentorService.SelectedMentorId;
+
+        var mentor = await Api.Mentors.GetMentorByUserId(mentorId); 
+
+        if (mentor == null)
+        {
+            Nav.NavigateTo("/mentors");
+        }
+
+        // var period = await Api.Mentors.GetMentorAvailableTimes(mentorId);
+    }
+
+    // private void SelectPeriod(string period)
+    // {
+    //     selectedPeriod = period;
+
+    //     var tempSlots = mentor.GetTimeSlots(period);
+
+    //     availableSlots = tempSlots;
+    // }
+
+    private void SelectTimeSlot(string slot)
+    {
+        selectedSlot = slot;
+        canConfirm = true;
+    }
+
+    private async Task ConfirmAppointment()
+    {
+        if (!string.IsNullOrEmpty(selectedSlot))
+        {
+            Console.WriteLine($"Appointment confirmed: {selectedSlot} with {mentor.User.FullName}");
+        }
+    }
+
+   
+}

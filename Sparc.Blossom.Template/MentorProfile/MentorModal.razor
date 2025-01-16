@@ -1,0 +1,27 @@
+﻿@inherits LayoutComponentBase
+
+@if (isVisible)
+{
+    <div class="modal">
+        <div class="modal-content">
+            <h4>@Mentor.User.FullName</h4>
+            <p><strong>Expertise:</strong> @string.Join(", ", Mentor.Expertise)</p>
+            <p><strong>Available Times:</strong> @string.Join(", ", Mentor.AvailableTimes)</p>
+            <button @onclick="OnClose">Close</button>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public Mentor Mentor { get; set; }
+    [Parameter] public EventCallback OnClose { get; set; }
+
+    private bool isVisible => Mentor != null;
+
+    private async Task Close()
+    {
+        await OnClose.InvokeAsync();
+    }
+}
+
+

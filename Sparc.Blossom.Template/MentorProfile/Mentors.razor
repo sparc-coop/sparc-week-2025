@@ -1,26 +1,50 @@
 ﻿@page "/mentors"
 
-<h3>Mentors Matching Your Interests</h3>
+<h2>Mentors Matching Your Interests</h2>
 
-@if (filteredMentors != null && filteredMentors.Any())
+@if (isLoading)
 {
-    <ul>
+    <p class="loading">Loading mentors...</p>  
+}
+else if (filteredMentors != null && filteredMentors.Any())
+{
+    <div class="mentor-cards-container">
         @foreach (var mentor in filteredMentors)
         {
-            <li>@mentor.User.FullName - Expertise: @string.Join(", ", mentor.Expertise)</li>
+            <div class="mentor-card">
+                <div class="mentor-card-header">
+                    <strong>@mentor.User.FullName</strong>
+                </div>
+                <div>
+                    <p><strong>Expertise:</strong> @string.Join(", ", mentor.Expertise)</p>
+                </div>
+                <div class="mentor-card-footer">
+                    <button @onclick="() => ShowMentorDetails(mentor)">View Profile</button>
+                    <button @onclick="() => SelectMentor(mentor)">Select Mentor</button>
+                </div>
+            </div>
         }
-    </ul>
+    </div>
 }
 else
 {
     <p>No mentors match your interests.</p>
 }
 
+@if (selectedMentor != null)
+{
+    <MentorModal Mentor="selectedMentor" OnClose="CloseMentorDetails" />
+}
+
 @code {
     private List<Mentor> filteredMentors;
+    private Mentor selectedMentor;  
+    private bool isLoading;
 
     protected override async Task OnInitializedAsync()
     {
+        isLoading = true;
+
         var userId = UserSessionService.CurrentUserId;
 
         if (string.IsNullOrEmpty(userId))
@@ -36,14 +60,47 @@ else
             return;
         }
 
-        var menteeInterests = mentee.FirstOrDefault().Interests; 
-
-        filteredMentors = (await Api.Mentors.GetMentorsByInterests(menteeInterests, userId)).ToList();
-
-        foreach (var mentor in filteredMentors)
+        var menteeInterests = mentee.FirstOrDefault().Interests;  
+        
+        if (menteeInterests != null)
         {
-            var userMentor = await Api.Users.GetUserById(mentor.UserId);
-            mentor.User = userMentor.FirstOrDefault();
+            filteredMentors = (await Api.Mentors.GetMentorsByInterests(menteeInterests, userId)).ToList();
+
+            foreach (var mentor in filteredMentors)
+            {
+                var userMentor = mentor.User;  
+
+                if (userMentor != null)
+                {
+                    mentor.SetUser(userMentor); 
+                }
+            }
+        }
+
+        isLoading = false;
+    }
+
+    private void ShowMentorDetails(Mentor mentor)
+    {
+        selectedMentor = mentor;
+    }
+
+    private void CloseMentorDetails()
+    {
+        selectedMentor = null;
+    }
+
+    private async Task SelectMentor(Mentor mentor)
+    {
+        var userId = UserSessionService.CurrentUserId;
+        var mentee = await Api.Mentees.GetMenteeByUserId(userId);
+
+        if (mentee != null)
+        {
+            mentee.FirstOrDefault().AssignMentor(mentor.UserId);
+
+            MentorService.SelectedMentorId = mentor.UserId; 
+            Nav.NavigateTo("/dashboard");
         }
     }
 }

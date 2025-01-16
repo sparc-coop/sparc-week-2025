@@ -12,7 +12,7 @@
 @using Sparc.Blossom.Api
 @using Sparc.Blossom.Template.MenteesProfile
 @using Sparc.Blossom.Template.MentorsProfile
-@using Sparc.Blossom.Template.Users
+@using Sparc.Blossom.Template.UserProfile
 @using Counter = Sparc.Blossom.Api.Counter
 @using Forecast = Sparc.Blossom.Api.Forecast
 @using User = Sparc.Blossom.Api.User
@@ -21,4 +21,5 @@
 
 @inject BlossomApi Api
 @inject NavigationManager Nav
-@inject Sparc.Blossom.Template.Users.UserSessionService UserSessionService
+@inject Sparc.Blossom.Template.UserProfile.UserSessionService UserSessionService
+@inject Sparc.Blossom.Template.MentorsProfile.MentorService MentorService

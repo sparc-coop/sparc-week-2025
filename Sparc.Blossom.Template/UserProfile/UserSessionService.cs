@@ -1,4 +1,4 @@
-﻿namespace Sparc.Blossom.Template.Users;
+﻿namespace Sparc.Blossom.Template.UserProfile;
 
 public class UserSessionService
 {

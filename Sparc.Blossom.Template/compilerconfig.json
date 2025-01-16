@@ -10,5 +10,17 @@
   {
     "outputFile": "wwwroot/app.css",
     "inputFile": "Html.scss"
+  },
+  {
+    "outputFile": "MentorProfile/Mentors.razor.css",
+    "inputFile": "MentorProfile/Mentors.razor.scss"
+  },
+  {
+    "outputFile": "MentorProfile/MentorModal.razor.css",
+    "inputFile": "MentorProfile/MentorModal.razor.scss"
+  },
+  {
+    "outputFile": "UserProfile/Dashboard.razor.css",
+    "inputFile": "UserProfile/Dashboard.razor.scss"
   }
 ]

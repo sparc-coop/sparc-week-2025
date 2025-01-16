@@ -1,0 +1,139 @@
+﻿@page "/login"
+@layout MainLayout
+
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Components.Forms
+
+<PageTitle>Login</PageTitle>
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">Healthcare</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/login">Login</a>
+                </li>
+                @* <li class="nav-item">
+                    <a class="nav-link" href="/services">Services</a>
+                </li> *@
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- Login Section -->
+<section class="login-section">
+    <div class="container">
+        <h2 class="text-center">Login</h2>
+        <EditForm Model="@loginModel" OnValidSubmit="HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div class="mb-3">
+                <label for="email" class="form-label">Email Address</label>
+                <InputText id="email" class="form-control" @bind-Value="loginModel.Email" />
+                <ValidationMessage For="@(() => loginModel.Email)" />
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <InputText id="password" class="form-control" @bind-Value="loginModel.Password" />
+                <ValidationMessage For="@(() => loginModel.Password)" />
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Login</button>
+        </EditForm>
+        <div class="text-center mt-3">
+            <a href="/Registration">Don't have an account? Register</a>
+        </div>
+    </div>
+</section>
+
+@code {
+    // Model for the login form
+    private LoginModel loginModel = new LoginModel();
+
+    // Handle form submission
+    private void HandleValidSubmit()
+    {
+        // Logic for handling valid login form submission
+        // You can add authentication logic here (e.g., validate credentials against a database or API)
+        Console.WriteLine($"Email: {loginModel.Email}, Password: {loginModel.Password}");
+    }
+
+    // LoginModel class for data binding and validation
+    public class LoginModel
+    {
+        [Required(ErrorMessage = "Email is required.")]
+        [EmailAddress(ErrorMessage = "Invalid email format.")]
+        public string Email { get; set; }
+
+        [Required(ErrorMessage = "Password is required.")]
+        [MinLength(6, ErrorMessage = "Password must be at least 6 characters long.")]
+        public string Password { get; set; }
+    }
+}
+
+<style>
+
+    /* Navbar Styling */
+    .navbar {
+        background-color: #388E3C;
+    }
+
+    .navbar-brand {
+        color: white !important;
+        font-weight: bold;
+    }
+
+    .nav-link {
+        color: white !important;
+        font-weight: 500;
+    }
+
+        .nav-link:hover {
+            color: #4CAF50 !important;
+        }
+
+    .login-section {
+        padding: 50px 0;
+        background: url('https://cdn.b12.io/client_media/uAwd8nI5/f223e968-d1ca-11ef-b208-0242ac110002-jpg-hero_image.jpeg') no-repeat center center; /* Add your image link here */
+        background-size: cover;
+        background-position: center;
+    }
+
+        .login-section .container {
+            max-width: 400px;
+            background-color: rgba(255, 255, 255, 0.8); /* semi-transparent background for form */
+            padding: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .login-section h2 {
+            margin-bottom: 30px;
+        }
+
+        .login-section .form-label {
+            font-weight: 600;
+        }
+
+        .login-section .btn {
+            font-size: 1.1rem;
+            padding: 10px;
+        }
+
+        .login-section a {
+            text-decoration: none;
+            color: #388E3C;
+        }
+
+            .login-section a:hover {
+                text-decoration: underline;
+            }
+</style>

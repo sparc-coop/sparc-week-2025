@@ -1,0 +1,204 @@
+﻿@page "/"
+@* @layout MainLayout *@
+@using Sparc.Blossom.Template
+
+<PageTitle>Healthcare Main Page</PageTitle>
+
+<style>
+    /* Body Styling */
+    body {
+        background-color: #f8f9fa;
+        font-family: 'Arial', sans-serif;
+    }
+
+    /* Navbar Styling */
+    .navbar {
+        background-color: #388E3C;
+    }
+
+    .navbar-brand {
+        color: white !important;
+        font-weight: bold;
+    }
+
+    .nav-link {
+        color: white !important;
+        font-weight: 500;
+    }
+
+        .nav-link:hover {
+            color: #4CAF50 !important;
+        }
+
+   
+    /* Hero Section */
+    .hero-section {
+        background: url('https://cdn.b12.io/client_media/uAwd8nI5/f1b0724e-d1ca-11ef-a09f-0242ac110002-jpg-hero_image.jpeg') no-repeat center center;
+        background-size: cover;
+        color: white;
+        padding: 100px 0;
+        text-align: center;
+    }
+
+        .hero-section h1 {
+            font-size: 3.5rem;
+            font-weight: bold;
+        }
+
+        .hero-section p {
+            font-size: 1.25rem;
+        }
+
+    /* About Section */
+    .about-section {
+        padding: 50px 0;
+        background-color: #ffffff;
+    }
+
+        .about-section h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .about-section p {
+            text-align: center;
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+    /* Services Section */
+    .services-section {
+        background-color: #f1f1f1;
+        padding: 60px 0;
+    }
+
+        .services-section h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+    .service-card {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+        .service-card h4 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .service-card p {
+            font-size: 1.1rem;
+        }
+
+    /* Footer */
+    footer {
+        background-color: #388E3C;
+        color: white;
+        padding: 20px 0;
+        text-align: center;
+        font-size: 1rem;
+    }
+
+    /* Responsive Design */
+   /*  media (max-width: 768px) {
+        .hero-section h1
+
+    {
+        font-size: 2.5rem;
+    }
+
+    .hero-section p {
+        font-size: 1rem;
+    }
+
+    .service-card {
+        margin-bottom: 15px;
+    }
+
+        .service-card h4 {
+            font-size: 1.25rem;
+        }
+
+        .service-card p {
+            font-size: 1rem;
+        }
+
+    } */
+</style>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">Healthcare</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/login">Login</a>
+                </li>
+                @* <li class="nav-item">
+                    <a class="nav-link" href="/services">Services</a>
+                </li> *@
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <h1>Welcome to Healthcare</h1>
+        <p>Your health, our priority. Providing quality care for a better tomorrow.</p>
+    </div>
+</section>
+
+<!-- About Section -->
+<section class="about-section">
+    <div class="container">
+        <h2>About Us</h2>
+        <p>At Healthcare, we are committed to delivering the highest quality healthcare services. Our team of professionals is dedicated to providing personalized care that meets the needs of every patient. Whether you’re seeking treatment for a specific condition or just want to take a proactive approach to your health, we’re here for you.</p>
+    </div>
+</section>
+
+<!-- Services Section -->
+<section class="services-section">
+    <div class="container">
+        <h2>Our Services</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="service-card">
+                    <h4>General Consultation</h4>
+                    <p>Our doctors provide general consultations for various health concerns, helping you understand your health and what actions to take.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="service-card">
+                    <h4>Specialized Treatment</h4>
+                    <p>We offer specialized treatment across multiple fields, including cardiology, dermatology, and more, to ensure you get the best care.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="service-card">
+                    <h4>Emergency Care</h4>
+                    <p>We are equipped with the resources to handle emergencies, ensuring timely medical intervention in critical situations.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer>
+    <p>&copy; 2025 Healthcare. All Rights Reserved.</p>
+</footer>

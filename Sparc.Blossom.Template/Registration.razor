@@ -1,0 +1,174 @@
+﻿@page "/Registration"
+@using Sparc.Blossom.Template.Common
+@using Sparc.Blossom.Template.Entities
+
+<PageTitle>User Registration</PageTitle>
+
+<style>
+	/* Background styling */
+	body {
+	background: url(https://cdn.b12.io/client_media/uAwd8nI5/f1f65322-d1ca-11ef-b208-0242ac110002-jpg-hero_image.jpeg) no-repeat center center;
+	background-size: cover;
+	background-position: center;
+	min-height: 100vh;
+	font-family: 'Roboto', sans-serif;
+	}
+
+	/* Card shadow and border */
+	.custom-card {
+	border: none;
+	border-radius: 12px;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+	background-color: rgba(255, 255, 255, 0.8); /* semi-transparent background */
+	}
+
+	/* Card header styles */
+	.custom-card-header {
+	background-color: #1976d2;
+	color: #ffffff;
+	border-top-left-radius: 12px;
+	border-top-right-radius: 12px;
+	text-align: center;
+	padding: 15px 0;
+	}
+
+	/* Button styling */
+	.btn-custom {
+	background-color: #1976d2;
+	border-color: #1976d2;
+	color: white;
+	font-weight: bold;
+	border-radius: 8px;
+	}
+
+	.btn-custom:hover {
+	background-color: #1565c0;
+	border-color: #1565c0;
+	}
+
+	/* Input field styling */
+	.form-control {
+	border-radius: 8px;
+	padding: 10px;
+	}
+
+	/* Text center alignment for footer */
+	footer {
+	text-align: center;
+	margin-top: 20px;
+	color: #6c757d;
+	font-size: 0.9rem;
+	}
+
+	/* Container positioning and centering */
+	.container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+	background: rgba(0, 0, 0, 0.4); /* Dark overlay to make the form stand out */
+	}
+
+	.card-body {
+	padding: 30px;
+	}
+</style>
+
+<div class="container">
+	<div class="col-md-6">
+		<div class="card custom-card">
+			<div class="card-header custom-card-header">
+				<h3>User Registration</h3>
+			</div>
+			<div class="card-body">
+				<EditForm Model="@user" OnValidSubmit="@HandleValidSubmit">
+					<DataAnnotationsValidator />
+					<ValidationSummary class="alert alert-danger" />
+
+					<!-- First Name -->
+					<div class="mb-3">
+						<label for="firstName" class="form-label fw-bold">First Name</label>
+						<InputText id="firstName" class="form-control shadow-sm" @bind-Value="user.FirstName" />
+						<ValidationMessage For="@(() => user.FirstName)" />
+					</div>
+
+					<!-- Last Name -->
+					<div class="mb-3">
+						<label for="lastName" class="form-label fw-bold">Last Name</label>
+						<InputText id="lastName" class="form-control shadow-sm" @bind-Value="user.LastName" />
+						<ValidationMessage For="@(() => user.LastName)" />
+					</div>
+
+					<!-- Email -->
+					<div class="mb-3">
+						<label for="email" class="form-label fw-bold">Email</label>
+						<InputText id="email" class="form-control shadow-sm" @bind-Value="user.Email" />
+						<ValidationMessage For="@(() => user.Email)" />
+					</div>
+
+					<!-- Phone -->
+					<div class="mb-3">
+						<label for="phone" class="form-label fw-bold">Phone</label>
+						<InputText id="phone" class="form-control shadow-sm" @bind-Value="user.Phone" />
+						<ValidationMessage For="@(() => user.Phone)" />
+					</div>
+					@*   <!-- Password -->
+                    <div class="mb-3">
+                        <label for="password" class="form-label fw-bold">Password</label>
+                        <InputPassword id="password" class="form-control shadow-sm" @bind-Value="user.Password" />
+                        <ValidationMessage For="@(() => user.Password)" />
+                    </div>
+
+                    <!-- Confirm Password -->
+                    <div class="mb-3">
+                        <label for="confirmPassword" class="form-label fw-bold">Confirm Password</label>
+                        <InputPassword id="confirmPassword" class="form-control shadow-sm" @bind-Value="user.ConfirmPassword" />
+                        <ValidationMessage For="@(() => user.ConfirmPassword)" />
+                    </div> *@
+					<!-- User Type -->
+					<div class="row">
+						<h5 class="mt-4 fw-bold text-primary">Register As</h5>
+						<InputRadioGroup @bind-Value="user.UserType" class="d-flex align-items-center gap-3 mt-3">
+							<div class="form-check">
+								<InputRadio Value="UserType.Doctor" class="form-check-input" id="doctor" />
+								<label for="doctor" class="form-check-label">Doctor</label>
+							</div>
+							<div class="form-check">
+								<InputRadio Value="UserType.Patient" class="form-check-input" id="patient" />
+								<label for="patient" class="form-check-label">Patient</label>
+							</div>
+						</InputRadioGroup>
+						<ValidationMessage For="@(() => user.UserType)" />
+					</div>
+
+					<!-- Submit Button -->
+					<div class="mt-4 text-center">
+						<button type="submit" class="btn btn-custom w-100 shadow-sm">Submit</button>
+					</div>
+					<div class="mt-3 text-center">
+						<a href="/" class="btn btn-secondary w-100 ">Back to Home</a>
+					</div>
+				</EditForm>
+			</div>
+		</div>
+		<footer>
+			© 2025 Healthcare Inc. All rights reserved.
+		</footer>
+	</div>
+</div>
+
+@inject NavigationManager Nav
+@inject Sparc.Blossom.Template.Aggregates.UserAggregate _userAggregate
+
+@code {
+	private Sparc.Blossom.Template.Entities.User user = new Sparc.Blossom.Template.Entities.User();
+
+	private async Task HandleValidSubmit()
+	{
+		await _userAggregate.Repository.AddAsync(user);
+
+		var data = await _userAggregate.GetUsersAsync();
+
+		Nav.NavigateTo("/");
+	}
+}

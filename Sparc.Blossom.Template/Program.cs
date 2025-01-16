@@ -1,15 +1,19 @@
 using System.Configuration;
 using Microsoft.Extensions.Configuration;
 using Sparc.Blossom.Template;
-using Sparc.Blossom.Template.Database;
+using Sparc.Database.SqlServer;
 
 var builder = BlossomApplication.CreateBuilder(args);
-builder.Services.AddScoped<Microsoft.AspNetCore.Authentication.AuthenticationService>();
+
+// Add services to the container.
+//builder.Services.AddScoped<AuthenticationService>();
+
+// Configure SQL Server database connection using connection string from appsettings.json
+// Optionally: Add any other services your app needs here, such as authentication or repositories
+
 var app = builder.Build();
 
-// Add some random forecast data to the Blossom database (in-memory is built in, no need to hook up a DB to build your app!)
-//using var scope = app.Services.CreateScope();
-//var forecastRepository = scope.ServiceProvider.GetRequiredService<IRepository<Forecast>>();
-//await forecastRepository.AddAsync(Forecast.Generate(60));
+// If you need to seed data, create a scope and add some random data
+
 
 await app.RunAsync<Html>();

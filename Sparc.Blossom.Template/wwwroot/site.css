@@ -1,0 +1,128 @@
+﻿/* Body Styling */
+body {
+    background-color: #f8f9fa;
+    font-family: 'Arial', sans-serif;
+    padding-top: 70px; /* To prevent content from being hidden under the fixed navbar */
+}
+
+/* Navbar Styling */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: #388E3C;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+    color: white !important;
+    font-weight: bold;
+}
+
+.nav-link {
+    color: white !important;
+    font-weight: 500;
+}
+
+    .nav-link:hover {
+        color: #4CAF50 !important;
+    }
+
+/* Hero Section */
+.hero-section {
+    background: url('https://cdn.b12.io/client_media/uAwd8nI5/f1b0724e-d1ca-11ef-a09f-0242ac110002-jpg-hero_image.jpeg') no-repeat center center;
+    background-size: cover;
+    color: white;
+    padding: 100px 0;
+    text-align: center;
+}
+
+    .hero-section h1 {
+        font-size: 3.5rem;
+        font-weight: bold;
+    }
+
+    .hero-section p {
+        font-size: 1.25rem;
+    }
+
+/* About Section */
+.about-section {
+    padding: 50px 0;
+    background-color: #ffffff;
+}
+
+    .about-section h2 {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .about-section p {
+        text-align: center;
+        font-size: 1.1rem;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+/* Services Section */
+.services-section {
+    background-color: #f1f1f1;
+    padding: 60px 0;
+}
+
+    .services-section h2 {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+.service-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+    .service-card h4 {
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+    }
+
+    .service-card p {
+        font-size: 1.1rem;
+    }
+
+/* Footer */
+footer {
+    background-color: #388E3C;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    font-size: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-section h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero-section p {
+        font-size: 1rem;
+    }
+
+    .service-card {
+        margin-bottom: 15px;
+    }
+
+        .service-card h4 {
+            font-size: 1.25rem;
+        }
+
+        .service-card p {
+            font-size: 1rem;
+        }
+}

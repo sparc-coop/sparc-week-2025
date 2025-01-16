@@ -1,6 +1,6 @@
-﻿@page "/doctors"
+﻿@page "/all-doctors"
 @using Sparc.Blossom.Template.Entities
-@inject Sparc.Blossom.Template.Aggregaters.UserAggregate _userAggregate;
+@inject Sparc.Blossom.Template.Aggregates.UserAggregate _userAggregate
 @inject NavigationManager Nav
 
 <PageTitle>Doctors List</PageTitle>
@@ -9,8 +9,8 @@
 
 <div class="container mt-4">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow">
+        <div class="col-12 col-md-10 col-lg-8">
+            <div class="card shadow-sm">
                 <div class="card-body">
                     @if (doctors == null)
                     {
@@ -22,13 +22,12 @@
                     }
                     else
                     {
-                        <table class="table table-striped">
+                        <table class="table table-bordered table-striped">
                             <thead>
                                 <tr>
                                     <th>Name</th>
                                     <th>Email</th>
-                                    <th>Phone</th>
-                                    <th>Specialty</th>
+                                    <th>Phone</th>                                   
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -36,13 +35,12 @@
                                 @foreach (var doctor in doctors)
                                 {
                                     <tr>
-                                        <td>@doctor.FirstName</td>
+                                        <td>@doctor.FirstName @doctor.LastName</td>
                                         <td>@doctor.Email</td>
-                                        <td>@doctor.Phone</td>
-@*                                         <td>@doctor.Specialty</td>
- *@                                        @* <td>
-                                            <button class="btn btn-info" @onclick="() => ViewDetails(doctor.Id)">View Details</button>
-                                        </td> *@
+                                        <td>@doctor.Phone</td>                                        
+                                        <td>
+                                            <button class="btn btn-info btn-sm" @onclick="() => ViewDetails(doctor.Id)">View Details</button>
+                                        </td>
                                     </tr>
                                 }
                             </tbody>
@@ -59,11 +57,71 @@
 
     protected override async Task OnInitializedAsync()
     {
-        doctors = await _userAggregate.GetAllDoctorsAsync();
+        //doctors = await _userAggregate.GetAllDoctorsAsync();
     }
 
-    private void ViewDetails(int doctorId)
+    private void ViewDetails(Guid doctorId)
     {
         Nav.NavigateTo($"/doctor/{doctorId}");
     }
 }
+
+<style>
+    /* Custom styles for the doctor's list page */
+    body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #f9f9f9;
+    }
+
+    .card {
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        background-color: #ffffff;
+    }
+
+    .card-body {
+        padding: 1.5rem;
+    }
+
+    table {
+        width: 100%;
+    }
+
+    th {
+        background-color: #1976d2;
+        color: white;
+        text-align: center;
+    }
+
+    td {
+        text-align: center;
+    }
+
+    .btn-info {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+        .btn-info:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+    .table th, .table td {
+        vertical-align: middle;
+    }
+
+    /* Responsive design adjustments */
+   /*  media (max-width: 768px) {
+        .card-body
+
+    {
+        padding: 1rem;
+    }
+
+    .table th, .table td {
+        font-size: 0.9rem;
+    }
+
+    } */
+</style>

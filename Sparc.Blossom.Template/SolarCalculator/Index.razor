@@ -40,6 +40,7 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        newEstimate.Type = "Residential";
         if (firstRender)
         {
             await LoadCurrentAddressAsync();

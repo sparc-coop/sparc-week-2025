@@ -1,6 +1,9 @@
 using Sparc.Blossom.Template;
+using Sparc.Blossom.Template.Users;
 
 var builder = BlossomApplication.CreateBuilder(args);
+
+builder.Services.AddScoped<UserSessionService>();
 
 var app = builder.Build();
 

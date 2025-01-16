@@ -13,10 +13,6 @@ public class User : BlossomEntity<string>
     public Mentor? MentorProfile { get; private set; }
     public Mentee? MenteeProfile { get; private set; }
 
-    public User() : base(Guid.NewGuid().ToString()) 
-    { 
-    }
-
     public User(string firstName, string lastName, string email) : base(Guid.NewGuid().ToString())
     {
         FirstName = firstName;

@@ -73,17 +73,19 @@
 
     private async Task HandleValidSubmit()
     {
-        await Api.Users.Create(user.FirstName, user.LastName, user.Email);
+         var currentUser = await Api.Users.Create(user.FirstName, user.LastName, user.Email);        
+
+        UserSessionService.CurrentUserId = currentUser.Id;
 
         if (profileType == ProfileType.Mentor || profileType == ProfileType.Both)
         {
-            mentorModel.UserId = user.Id;
+            mentorModel.UserId = currentUser.Id;
             await Api.Mentors.Create(mentorModel.UserId, mentorModel.Expertise, mentorModel.AvailableTimes);
         }
 
         if (profileType == ProfileType.Mentee || profileType == ProfileType.Both)
         {
-            menteeModel.UserId = user.Id;
+            menteeModel.UserId = currentUser.Id;
             await Api.Mentees.Create(menteeModel.UserId, menteeModel.Interests, menteeModel.PreferredTimes);
         }
         

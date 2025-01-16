@@ -1,7 +1,49 @@
 ﻿@page "/mentors"
 
-<h3>Mentors</h3>
+<h3>Mentors Matching Your Interests</h3>
+
+@if (filteredMentors != null && filteredMentors.Any())
+{
+    <ul>
+        @foreach (var mentor in filteredMentors)
+        {
+            <li>@mentor.User.FullName - Expertise: @string.Join(", ", mentor.Expertise)</li>
+        }
+    </ul>
+}
+else
+{
+    <p>No mentors match your interests.</p>
+}
 
 @code {
+    private List<Mentor> filteredMentors;
 
+    protected override async Task OnInitializedAsync()
+    {
+        var userId = UserSessionService.CurrentUserId;
+
+        if (string.IsNullOrEmpty(userId))
+        {
+            Nav.NavigateTo("/");
+            return;
+        }
+
+        var mentee = await Api.Mentees.GetMenteeByUserId(userId); 
+        if (mentee == null)
+        {
+            Nav.NavigateTo("/");
+            return;
+        }
+
+        var menteeInterests = mentee.FirstOrDefault().Interests; 
+
+        filteredMentors = (await Api.Mentors.GetMentorsByInterests(menteeInterests, userId)).ToList();
+
+        foreach (var mentor in filteredMentors)
+        {
+            var userMentor = await Api.Users.GetUserById(mentor.UserId);
+            mentor.User = userMentor.FirstOrDefault();
+        }
+    }
 }

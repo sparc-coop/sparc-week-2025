@@ -9,7 +9,7 @@ public class Mentor : BlossomEntity<string>
     public List<string> Expertise { get; set; } = new List<string>();
     public List<string> AvailableTimes { get; set; } = new List<string>();
 
-    public User User { get; private set; }
+    public User User { get; set; }
 
     public Mentor() : base(Guid.NewGuid().ToString())
     {

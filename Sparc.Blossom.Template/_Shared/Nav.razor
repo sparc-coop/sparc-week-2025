@@ -1,0 +1,25 @@
+﻿<nav>
+    <h1 class="nav-left">
+        <a href="/dashboard">CheckAmi</a>
+    </h1>
+    <div class="nav-right menu">
+        <button class="menu-btn" @onclick=ToggleMenu>
+            <img class="menu-open @(ShowMenu ? "" : "show")" src="/assets/icons/menu-solid.svg" />
+            <img class="menu-close @(ShowMenu ? "show" : "")" src="/assets/icons/x-solid.svg" />
+        </button>
+        <div class="links @(ShowMenu ? "show" : "")">
+            <a href="/dashboard">Dashboard</a>
+            <a href="/settings">Settings</a>
+            <a href="/login">Logout</a>
+        </div>
+    </div>
+</nav>
+
+@code {
+    bool ShowMenu = false;
+    
+    void ToggleMenu()
+    {
+        ShowMenu = !ShowMenu;
+    }
+}

@@ -1,6 +1,6 @@
 ﻿namespace Sparc.Blossom.Template
 {
-    public class Message : BlossomEntity
+    public class Message : BlossomEntity<string>
     {
         public Message(string userId, StoredMessage message)
         {

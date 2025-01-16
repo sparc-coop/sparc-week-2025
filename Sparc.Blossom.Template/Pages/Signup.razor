@@ -1,0 +1,44 @@
+﻿@page "/signup"
+
+<div class="signup">
+    <div class="hero">
+        <img src="/assets/images/pigeon-drawing.png" />
+    </div>
+    <div class="signup-form">
+        <div class="signup-input">
+            <input type="text" placeholder="First Name" @bind="newUser.FirstName" />
+            <input type="text" placeholder="Last Name" @bind="newUser.LastName" />
+            <input type="email" placeholder="Email" @bind="newUser.Email" />
+            <input type="tel" placeholder="Phone" @bind="newUser.Phone" />
+            @* <select @bind="newUser.UserType">
+                <option style="font-style: italic;" value="0">User Type</option>
+                <option value="Patient">Patient</option>
+                <option value="Family">Family or Friend</option>
+                <option value="Caregiver">Caregiver</option>
+            </select> *@
+            <input type="password" placeholder="Password" @bind="newUser.Password" />
+            <input type="password" placeholder="Verify Password" @onchange=ValidatePassword />
+            <button class="signup-btn" @onclick=CreateUser>Sign Up</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    Sparc.Blossom.Api.User newUser = new Sparc.Blossom.Api.User();
+
+    private async Task<Sparc.Blossom.Api.User> CreateUser()
+    {
+        newUser.UserType = UserTypes.Primary;
+        var user = Sparc.Blossom.Api.User.Create(newUser.FirstName, newUser.LastName, newUser.Email, newUser.Phone, newUser.UserType, newUser.Password);
+        return user;
+    }
+
+    void ValidatePassword(ChangeEventArgs e)
+    {
+        var password = e.Value.ToString();
+        if (password != newUser.Password)
+        {
+            Console.WriteLine("Passwords do not match");
+        }
+    }
+}

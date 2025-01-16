@@ -1,38 +1,44 @@
 html, body {
+    margin: 0;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
-body {
-    position: relative;
-    display: flex;
-    flex-direction: column;
+button {
+    width: fit-content;
+    margin: 0 auto;
+    padding: 6px 10px;
+    background: none;
+    border: 1px solid #000;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
 a {
-    color: #006bb7;
+    color: #000;
     text-decoration: none;
-    &:hover {
-        text-decoration: underline;
+
+    &:visited {
+        color: inherit;
     }
 }
 
-button {
-    color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
-    padding: 6px 12px;
-    outline: none;
-    box-shadow: none;
-    border-radius: 8px;
-
-
-    &:focus {
-        box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-    }
+h1, h2, h3, h4, h5, h6, p {
+    margin: 0;
+    padding: 0;
 }
 
 h1:focus {
     outline: none;
+}
+
+input, select {
+    padding: 6px 10px;
+    border: 1px solid #000;
+    border-radius: 4px;
+}
+
+select {
+    padding: 6px;
 }
 
 .blazor-error-boundary {
@@ -42,11 +48,5 @@ h1:focus {
 
     &::after {
         content: "An error has occurred."
-    }
-}
-
-@media (min-width: 641px) {
-    body {
-        flex-direction: row;
     }
 }

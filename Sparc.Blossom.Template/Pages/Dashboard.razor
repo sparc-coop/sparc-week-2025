@@ -1,0 +1,84 @@
+﻿@page "/dashboard"
+
+<div class="dashboard @(UserType + "-user")">
+    <div class="primary-user__container">
+        <div class="quick-glance">
+            <div class="upcoming">
+                <h3>Upcoming Tasks</h3>
+                <div class="task-list">
+                    @foreach (var todo in Upcoming) 
+                    {
+                        <TodoCard />
+                    }
+                </div>
+            </div>
+            <div class="completed">
+                <h3>Completed Tasks</h3>
+                <div class="task-list">
+                    @foreach (var todo in Completed)
+                    {
+                        <TodoCard />
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="shortcuts">
+            <h3>Shortcuts</h3>
+            <div class="shortcut-list">
+                <button class="shortcut-btn">
+                    <div class="icon-container">
+                        <img src="/assets/icons/phone-solid.svg" />
+                    </div>
+                    <h5>Communication</h5>
+                </button>
+                <button class="shortcut-btn">
+                    <div class="icon-container">
+                        <img src="/assets/icons/bell-solid.svg" />
+                    </div>
+                    <h5>Notifications</h5>
+                </button>
+                <button class="shortcut-btn">
+                    <div class="icon-container">
+                        <img src="/assets/icons/pills-solid.svg" />
+                    </div>
+                    <h5>Medications</h5>
+                </button>
+                <button class="shortcut-btn">
+                    <div class="icon-container">
+                        <img src="/assets/icons/kit-medical-solid.svg" />
+                    </div>
+                    <h5>Help</h5>
+                </button>
+                </div>
+        </div>
+    </div>
+    <div class="secondary-user__container">
+
+    </div>
+</div>
+
+@code {
+    [Parameter] public Sparc.Blossom.Template.User? User { get; set; }
+    IEnumerable<Sparc.Blossom.Api.ToDo> ToDos = new List<Sparc.Blossom.Api.ToDo>();
+    IEnumerable<Sparc.Blossom.Api.ToDo> Upcoming = new List<Sparc.Blossom.Api.ToDo>();
+    IEnumerable<Sparc.Blossom.Api.ToDo> Completed = new List<Sparc.Blossom.Api.ToDo>();
+
+    string? UserType;
+
+    protected override async Task OnInitializedAsync() {
+        if (User != null) {
+            if (User.UserType == UserTypes.Primary)
+            {
+                UserType = "primary";
+                ToDos = await Api.ToDos.AllTodosForUser(User.Id);
+                Upcoming = ToDos.Where(todo => todo.Status == TodoStatus.Upcoming);
+                Completed = ToDos.Where(todo => todo.Status == TodoStatus.Completed);
+            }
+            else if (User.UserType == UserTypes.Secondary)
+            {
+                UserType = "secondary";
+            }
+        }
+
+    }
+}

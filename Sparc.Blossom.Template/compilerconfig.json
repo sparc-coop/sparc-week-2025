@@ -1,5 +1,9 @@
 ﻿[
   {
+    "outputFile": "wwwroot/app.css",
+    "inputFile": "Html.scss"
+  },
+  {
     "outputFile": "_Shared/MainLayout.razor.css",
     "inputFile": "_Shared/MainLayout.razor.scss"
   },
@@ -8,7 +12,39 @@
     "inputFile": "_Shared/NavMenu.razor.scss"
   },
   {
-    "outputFile": "wwwroot/app.css",
-    "inputFile": "Html.scss"
+    "outputFile": "_Shared/Nav.razor.css",
+    "inputFile": "_Shared/Nav.razor.scss"
+  },
+  {
+    "outputFile": "Pages/Dashboard.razor.css",
+    "inputFile": "Pages/Dashboard.razor.scss"
+  },
+  {
+    "outputFile": "Pages/Comms.razor.css",
+    "inputFile": "Pages/Comms.razor.scss"
+  },
+  {
+    "outputFile": "Pages/Login.razor.css",
+    "inputFile": "Pages/Login.razor.scss"
+  },
+  {
+    "outputFile": "Pages/Signup.razor.css",
+    "inputFile": "Pages/Signup.razor.scss"
+  },
+  {
+    "outputFile": "Pages/Medications.razor.css",
+    "inputFile": "Pages/Medications.razor.scss"
+  },
+  {
+    "outputFile": "Components/UserCard.razor.css",
+    "inputFile": "Components/UserCard.razor.scss"
+  },
+  {
+    "outputFile": "Components/MedCard.razor.css",
+    "inputFile": "Components/MedCard.razor.scss"
+  },
+  {
+    "outputFile": "Components/TodoCard.razor.css",
+    "inputFile": "Components/TodoCard.razor.scss"
   }
 ]

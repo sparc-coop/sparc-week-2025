@@ -1,6 +1,6 @@
 ﻿namespace Sparc.Blossom.Template
 {
-    public class Medication : BlossomEntity
+    public class Medication : BlossomEntity<string>
     {
         public Medication(string userId, string name, string description, string dosage, string frequency, string instructions, string prescribingMD, DateTime refillBy)
         {

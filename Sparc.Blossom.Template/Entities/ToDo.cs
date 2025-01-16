@@ -1,6 +1,6 @@
 ﻿namespace Sparc.Blossom.Template
 {
-    public class ToDo : BlossomEntity
+    public class ToDo : BlossomEntity<string>
     {
         public ToDo(string userId, string title, string description, TodoTypes type, TodoStatus status)
         {

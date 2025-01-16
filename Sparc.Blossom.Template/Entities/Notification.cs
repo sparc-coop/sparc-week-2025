@@ -1,8 +1,8 @@
 ﻿namespace Sparc.Blossom.Template
 {
-    public class Notification : BlossomEntity
+    public class Notification : BlossomEntity<string>
     {
-        public Notification(string userId, string taskId, string status)
+        public Notification(string userId, string taskId, NotificationStatus status)
         {
             Id = new Guid().ToString();
             UserId = userId;

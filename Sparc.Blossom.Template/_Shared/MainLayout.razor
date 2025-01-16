@@ -1,21 +1,17 @@
 ﻿@inherits LayoutComponentBase
 
-<aside>
-    <NavMenu />
-</aside>
+<Nav />
 
 <main>
-    <header>
-        <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-    </header>
-
-    <article>
-        @Body
-    </article>
+    <div class="main-container">
+        <div class="main-content">
+            @Body
+        </div>
+    </div>
 </main>
 
-<div id="blazor-error-ui" data-nosnippet>
+@* <div id="blazor-error-ui" data-nosnippet>
     An unhandled error has occurred.
     <a href="." class="reload">Reload</a>
     <span class="dismiss">🗙</span>
-</div>
+</div> *@

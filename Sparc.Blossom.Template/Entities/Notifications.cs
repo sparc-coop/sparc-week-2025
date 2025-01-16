@@ -9,6 +9,6 @@
         {
             var userNotifications = Query().Where(x => x.UserId == userId);
             return userNotifications?.Where(x => x.Status == NotificationStatus.Active);
-        }
+        } 
     }    
 }

@@ -1,0 +1,151 @@
+﻿@page "/"
+@using WhatsUpDocx.Services
+@using WhatsUpDocx.Users
+
+<div>
+    <div>
+        <img src="@Assets["logo.jpg"]" style="max-height: 300px;" />
+    </div>
+    <InputFile OnChange="LoadFiles" multiple />
+    <div>
+        <h3>Run info</h3>
+        <table>
+            <tr>
+                <td>Id</td>
+                <td>@Run.Id</td>
+            </tr>
+            <tr>
+                <td>Created at</td>
+                <td>@Run.CreatedAt</td>
+            </tr>
+            <tr>
+                <td>Status</td>
+                <td>@Run.Status</td>
+            </tr>
+            <tr>
+                <td>Assistant id</td>
+                <td>@Run.AssistantId</td>
+            </tr>
+            <tr>
+                <td>Thread id</td>
+                <td>@Run.ThreadId</td>
+            </tr>
+        </table>
+    </div>
+    <div>
+        <div>
+            <h3>Selected Document</h3>
+            <div>
+                Document Name: @SelectedDocument.Name
+            </div>
+            <div>
+                Analysis: @SelectedDocument.Analysis
+            </div>
+        </div>
+    </div>
+    <h3>My Documents</h3>
+    <div>
+        @if (MyDocuments.Count() == 0)
+        {
+            <div>No documents yet, upload one, Doc!</div>
+        }
+        else
+        {
+            @foreach (var document in MyDocuments)
+            {
+                <div @onclick="() => SelectDocument(document.Id)">
+                    <div>
+                        <img src="@Assets["wordicon.png"]" style="max-height: 32px;" />
+                    </div>
+                    <div>
+                        <div>@document.Name</div>
+                    </div>
+                </div>
+
+            }
+        }
+
+    </div>
+
+</div>
+
+@inject AssistantsApiService AssistantsApiService
+@code {
+    Users.User User = new Users.User();
+    IEnumerable<Sparc.Blossom.Api.Document> MyDocuments = new List<Sparc.Blossom.Api.Document>();
+    Sparc.Blossom.Api.Document SelectedDocument = new Sparc.Blossom.Api.Document();
+
+    string UploadResult = string.Empty;
+    RunResponse Run = new RunResponse();
+    GetMessagesResponse Messages = new GetMessagesResponse();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var user = User;
+        MyDocuments = await Api.Documents.All();
+    }
+
+    private async void LoadFiles(InputFileChangeEventArgs e)
+    {
+        var abcd = e.File;
+
+        var fileId = await UploadFiles(e.File);
+        if (fileId == "error")
+        {
+            return;
+        }
+
+        var thread = await AssistantsApiService.CreateThreadAsync();
+        var message = await AssistantsApiService.CreateMessageAsync(thread.Id, fileId);
+        var newRun = await AssistantsApiService.CreateRunAsync(thread.Id, "asst_PmXhBmnjbGFNKOZCNt0uRefe");
+
+        Run = await AssistantsApiService.GetRunAsync(thread.Id, newRun.Id);
+
+        StateHasChanged();
+
+        while (Run.Status != "completed")
+        {
+            await Task.Delay(2 * 1000);
+            Run = await AssistantsApiService.GetRunAsync(thread.Id, newRun.Id);
+            Messages = await AssistantsApiService.GetMessagesAsync(thread.Id);
+            StateHasChanged();
+        }
+
+        var newDocument = await Api.Documents.Create();
+        var analysisMessage = Messages.Data[0].Content.FirstOrDefault().Text.Value;
+
+        await newDocument.DefineDocument(e.File.Name, analysisMessage);
+        MyDocuments = await Api.Documents.All();
+        SelectedDocument = newDocument;
+
+        StateHasChanged();
+    }
+
+    private async Task<string> UploadFiles(IBrowserFile file)
+    {
+        try
+        {
+
+            if (file == null)
+            {
+                return "error";
+            }
+
+            var fileResponse = await AssistantsApiService.UploadFileAsync(file);
+
+            return fileResponse.Id;
+        }
+        catch (Exception ex)
+        {
+            UploadResult = $"Error: {ex.Message}";
+            return "abc";
+        }
+    }
+
+    private async Task<string> SelectDocument(string documentId)
+    {
+        SelectedDocument = MyDocuments.Where(x => x.Id == documentId).FirstOrDefault();
+        StateHasChanged();
+        return "abc";
+    }
+}

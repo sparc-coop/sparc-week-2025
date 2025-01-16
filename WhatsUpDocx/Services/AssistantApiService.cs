@@ -28,7 +28,6 @@
     {
         public string Instructions { get; set; }
     }
-
     public class AssistantsApiService
     {
         private readonly HttpClient _httpClient;
@@ -48,88 +47,30 @@
             // _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "YOUR_OPENAI_API_KEY");
             // _httpClient.DefaultRequestHeaders.Add("OpenAI-Beta", "assistants=v2");
         }
-        public async Task<string> CreateAssistantAsync(CreateAssistantRequest request)
-        {
-            var body = new
-            {
-                name = request.Name,
-                instructions = request.Instructions,
-                tools = request.Tools,
-                model = request.Model
-            };
 
-            var jsonContent = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync("v1/assistants", jsonContent);
-            response.EnsureSuccessStatusCode();
-
-            var jsonString = await response.Content.ReadAsStringAsync();
-            var doc = JsonDocument.Parse(jsonString);
-            _assistantId = doc.RootElement.GetProperty("id").GetString(); // e.g. assistant_xyz123
-
-            return jsonString; // or you could return the Assistant ID or a typed model
-        }
-
-        public async Task<string> CreateThreadAsync()
+        public async Task<ThreadResponse> CreateThreadAsync()
         {
             var response = await _httpClient.PostAsync("v1/threads", new StringContent("", Encoding.UTF8, "application/json"));
             response.EnsureSuccessStatusCode();
 
+
+            // Read and deserialize the response
             var jsonString = await response.Content.ReadAsStringAsync();
-            var doc = JsonDocument.Parse(jsonString);
-            _threadId = doc.RootElement.GetProperty("id").GetString(); // e.g. thread_abc123
-
-            return jsonString; // or just the Thread ID
-        }
-
-        public async Task<string> CreateThreadWithMessageAndFileAsync(string fileId)
-        {
-            // 1. Construct the request body:
-            var body = new
+            var result = System.Text.Json.JsonSerializer.Deserialize<ThreadResponse>(jsonString, new System.Text.Json.JsonSerializerOptions
             {
-                messages = new[]
-                {
-                    new
-                    {
-                        role = "user",
-                        content = "Please, analyze the content of the file"
-                    }
-                },
-                attachments = new[]
-                {
-                    new
-                    {
-                        file_id = fileId,
-                        tools = new[]
-                        {
-                            new
-                            {
-                                type = "file_search"
-                            }
-                        }
-                    }
-                }
-            };
+                PropertyNameCaseInsensitive = true
+            });
 
-            // 2. Serialize the body to JSON
-            var jsonBody = JsonSerializer.Serialize(body);
-
-            // 3. POST /v1/threads with the JSON
-            using var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync("v1/threads", content);
-            response.EnsureSuccessStatusCode();
-
-            // 4. Return raw JSON (or parse it)
-            var result = await response.Content.ReadAsStringAsync();
-            return result;
+            return result; // or just the Thread ID
         }
 
-        public async Task<string> CreateMessageAsync(string threadId, string fileId)
+        public async Task<MessageResponse> CreateMessageAsync(string threadId, string fileId)
         {
             // 1. Construct the request body:
             var body = new
             {
                 role = "user",
-                content = "Please, analyze the content of the file",
+                content = "Please, give me a summary of the content of the file",
                 attachments = new[]
                 {
                     new
@@ -154,19 +95,30 @@
             var response = await _httpClient.PostAsync($"v1/threads/{threadId}/messages", content);
             response.EnsureSuccessStatusCode();
 
-            // 4. Return raw JSON (or parse it)
-            var result = await response.Content.ReadAsStringAsync();
+            // Read and deserialize the response
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var result = System.Text.Json.JsonSerializer.Deserialize<MessageResponse>(jsonString, new System.Text.Json.JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
             return result;
         }
 
-        public async Task<string> GetThreadAsync(string threadId)
+        public async Task<ThreadResponse> GetThreadAsync(string threadId)
         {
             var url = $"v1/threads/{threadId}";
 
             var response = await _httpClient.GetAsync(url);
             response.EnsureSuccessStatusCode();
 
-            var result = await response.Content.ReadAsStringAsync();
+            // Read and deserialize the response
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var result = System.Text.Json.JsonSerializer.Deserialize<ThreadResponse>(jsonString, new System.Text.Json.JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
             return result;
         }
 
@@ -181,14 +133,21 @@
             return result;
         }
 
-        public async Task<string> GetMessagesAsync(string threadId)
+        public async Task<GetMessagesResponse> GetMessagesAsync(string threadId)
         {
             var url = $"v1/threads/{threadId}/messages";
 
             var response = await _httpClient.GetAsync(url);
             response.EnsureSuccessStatusCode();
 
-            return await response.Content.ReadAsStringAsync();
+            // Read and deserialize the response
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var result = System.Text.Json.JsonSerializer.Deserialize<GetMessagesResponse>(jsonString, new System.Text.Json.JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            return result;
         }
 
         public async Task<string> GetFileAsync(string fileId)
@@ -212,7 +171,7 @@
             return await response.Content.ReadAsStringAsync();
         }
 
-        public async Task<string> UploadFileAsync(IBrowserFile blazorFile, string purpose = "assistants")
+        public async Task<FileResponse> UploadFileAsync(IBrowserFile blazorFile, string purpose = "assistants")
         {
             // Validate
             if (blazorFile == null)
@@ -228,32 +187,21 @@
 
             formData.Add(fileContent, "file", blazorFile.Name);
 
-            // 5. Post to OpenAI /v1/files
+            // Post to OpenAI /v1/files
             var response = await _httpClient.PostAsync("v1/files", formData);
             response.EnsureSuccessStatusCode();
 
-            // 6. Return raw JSON string (or deserialize to a C# model)
-            var result = await response.Content.ReadAsStringAsync();
+            // Deserialize the response into FileResponse
+            var json = await response.Content.ReadAsStringAsync();
+            var result = System.Text.Json.JsonSerializer.Deserialize<FileResponse>(json, new System.Text.Json.JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
             return result;
         }
 
-        public async Task<string> CreateMessageAsync(CreateMessageRequest request)
-        {
-            var body = new
-            {
-                role = request.Role,    // "user" | "system" | "assistant"
-                content = request.Content
-            };
-
-            var url = $"v1/threads/{_threadId}/messages";
-            var jsonContent = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync(url, jsonContent);
-            response.EnsureSuccessStatusCode();
-
-            return await response.Content.ReadAsStringAsync();
-        }
-
-        public async Task<string> CreateRunAsync(string threadId, string assistantId)
+        public async Task<RunResponse> CreateRunAsync(string threadId, string assistantId)
         {
             var body = new
             {
@@ -266,15 +214,28 @@
             var response = await _httpClient.PostAsync(url, jsonContent);
             response.EnsureSuccessStatusCode();
 
-            return await response.Content.ReadAsStringAsync();
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var result = System.Text.Json.JsonSerializer.Deserialize<RunResponse>(jsonString, new System.Text.Json.JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            return result;
         }
 
-        public async Task<string> GetRunAsync(string threadId, string runId)
+        public async Task<RunResponse> GetRunAsync(string threadId, string runId)
         {
             var url = $"v1/threads/{threadId}/runs/{runId}";
             var response = await _httpClient.GetAsync(url);
             response.EnsureSuccessStatusCode();
-            return await response.Content.ReadAsStringAsync();
+
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var result = System.Text.Json.JsonSerializer.Deserialize<RunResponse>(jsonString, new System.Text.Json.JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            return result;
         }
 
         public async Task<string> GetRunsAsync(string threadId)
@@ -286,6 +247,99 @@
 
             return await response.Content.ReadAsStringAsync();
         }
+
+        public class FileResponse
+        {
+            public string Id { get; set; }
+            public string Object { get; set; }
+            public long Bytes { get; set; }
+            public long CreatedAt { get; set; }
+            public string Filename { get; set; }
+            public string Purpose { get; set; }
+        }
+        public class ThreadResponse
+        {
+            public string Id { get; set; }
+            public string Object { get; set; }
+            public long CreatedAt { get; set; }
+            public Dictionary<string, object> Metadata { get; set; }
+            public Dictionary<string, object> ToolResources { get; set; }
+        }
+        public class MessageResponse
+        {
+            public string Id { get; set; }
+            public string Object { get; set; }
+            public long CreatedAt { get; set; }
+            public string AssistantId { get; set; }
+            public string ThreadId { get; set; }
+            public string RunId { get; set; }
+            public string Role { get; set; }
+            public List<ContentDetails> Content { get; set; }
+            public List<object> Attachments { get; set; }
+            public Dictionary<string, object> Metadata { get; set; }
+
+            public class ContentDetails
+            {
+                public string Type { get; set; }
+                public Text Text { get; set; }
+            }
+
+            public class Text
+            {
+                public string Value { get; set; }
+                public List<object> Annotations { get; set; }
+            }
+        }
+
+        public class GetMessagesResponse
+        {
+            public string Object { get; set; }
+            public List<MessageResponse> Data { get; set; }
+            public string FirstId { get; set; }
+            public string LastId { get; set; }
+            public bool HasMore { get; set; }
+        }
+        public class RunResponse
+        {
+            public string Id { get; set; }
+            public string Object { get; set; }
+            public long CreatedAt { get; set; }
+            public string AssistantId { get; set; }
+            public string ThreadId { get; set; }
+            public string Status { get; set; }
+            public long? StartedAt { get; set; }
+            public long? ExpiresAt { get; set; }
+            public long? CancelledAt { get; set; }
+            public long? FailedAt { get; set; }
+            public long? CompletedAt { get; set; }
+            public string LastError { get; set; }
+            public string Model { get; set; }
+            public string Instructions { get; set; }
+            public object IncompleteDetails { get; set; }
+            public List<Tool> Tools { get; set; }
+            public Dictionary<string, object> Metadata { get; set; }
+            public object Usage { get; set; }
+            public double Temperature { get; set; }
+            public double TopP { get; set; }
+            public int MaxPromptTokens { get; set; }
+            public int MaxCompletionTokens { get; set; }
+            public TruncationStrategyDetails TruncationStrategy { get; set; }
+            public string ResponseFormat { get; set; }
+            public string ToolChoice { get; set; }
+            public bool ParallelToolCalls { get; set; }
+
+            public class Tool
+            {
+                public string Type { get; set; }
+            }
+
+            public class TruncationStrategyDetails
+            {
+                public string Type { get; set; }
+                public object LastMessages { get; set; }
+            }
+        }
+
 
     }
 }

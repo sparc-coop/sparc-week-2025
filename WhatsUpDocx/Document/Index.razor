@@ -1,20 +1,69 @@
-﻿@page "/"
+﻿@page "/Upload"
 @using WhatsUpDocx.Services
 
 <h3>Index</h3>
 
 <InputFile OnChange="LoadFiles" multiple />
 
+<div>
+    <h3>Run info</h3>
+    <div>
+        <table>
+            <tr>
+                <td>Id</td>
+                <td>@Run.Id</td>
+            </tr>
+            <tr>
+                <td>Created at</td>
+                <td>@Run.CreatedAt</td>
+            </tr>
+            <tr>
+                <td>Status</td>
+                <td>@Run.Status</td>
+            </tr>
+            <tr>
+                <td>Assistant id</td>
+                <td>@Run.AssistantId</td>
+            </tr>
+            <tr>
+                <td>Thread id</td>
+                <td>@Run.ThreadId</td>
+            </tr>
+            <tr>
+                <td>Messages</td>
+                <td>
+                    <ul>
+                        @if (Messages.Data != null)
+                        {
+                            @foreach (var message in Messages.Data)
+                            {
+                                <li>@message.Id</li>
+                                @foreach (var item in message.Content)
+                                {
+                                    <li>@item.Text.Value</li>
+                                }
+                            }
+                        }
+                    </ul>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</div>
+
 @inject AssistantsApiService AssistantsApiService
 @code {
-    Document MyDocument = null!;
+
     string UploadResult = string.Empty;
+    WhatsUpDocx.Services.AssistantsApiService.RunResponse Run = new WhatsUpDocx.Services.AssistantsApiService.RunResponse();
+    WhatsUpDocx.Services.AssistantsApiService.GetMessagesResponse Messages = new WhatsUpDocx.Services.AssistantsApiService.GetMessagesResponse();
 
     protected override async Task OnInitializedAsync()
     {
-        MyDocument = await Api.Documents.Create();
-        var files = await AssistantsApiService.GetFilesAsync();
-        var file = await AssistantsApiService.GetFileAsync("file-Lb1L8TJPD5J8XZrgpD63m7");
+
+        // var files = await AssistantsApiService.GetFilesAsync();
+        // var file = await AssistantsApiService.GetFileAsync("file-Lb1L8TJPD5J8XZrgpD63m7");
 
         var tempFileId = "file-Lb1L8TJPD5J8XZrgpD63m7";
         var tempThreadId = "thread_6IRpNpAcL3NVSGGiBVkH6Xra";
@@ -29,12 +78,11 @@
 
 
         // var result = await AssistantsApiService.CreateRunAsync(tempThreadId, assistantId);
-        var messages = await AssistantsApiService.GetMessagesAsync(tempThreadId);
-        var runs = await AssistantsApiService.GetRunsAsync(tempThreadId);
+        // var messages = await AssistantsApiService.GetMessagesAsync(tempThreadId);
+        // var runs = await AssistantsApiService.GetRunsAsync(tempThreadId);
 
-        var run = await AssistantsApiService.GetRunAsync(tempThreadId, runId);
+        // var run = await AssistantsApiService.GetRunAsync(tempThreadId, runId);
 
-        // var thread = await AssistantsApiService.CreateThreadWithMessageAndFileAsync(tempFileId);
         // var tempThread = await AssistantsApiService.GetThreadAsync("thread_zobYs1LSF1xL0ufYaajhD3FY");
         var test = "abc";
     }
@@ -44,8 +92,29 @@
         var abcd = e.File;
 
         var fileId = await UploadFiles(e.File);
+        if (fileId == "error")
+        {
+            return;
+        }
 
-        
+        var thread = await AssistantsApiService.CreateThreadAsync();
+
+        var message = await AssistantsApiService.CreateMessageAsync(thread.Id, fileId);
+
+        var newRun = await AssistantsApiService.CreateRunAsync(thread.Id, "asst_PmXhBmnjbGFNKOZCNt0uRefe");
+
+        Run = await AssistantsApiService.GetRunAsync(thread.Id, newRun.Id);
+        // Thread = await AssistantsApiService.GetThreadAsync(thread.Id);
+        StateHasChanged();
+
+        while (Run.Status != "completed")
+        {
+            await Task.Delay(2 * 1000);
+            Run = await AssistantsApiService.GetRunAsync(thread.Id, newRun.Id);
+            Messages = await AssistantsApiService.GetMessagesAsync(thread.Id);
+            StateHasChanged();
+        }
+
         // var result = await AssistantsApiService.CreateThreadAsync();
         // var threadId = "thread_oN3rRNwo6uxayRAnAVzgOwv0";
         // var thread = await AssistantsApiService.GetThreadAsync(threadId);
@@ -62,16 +131,15 @@
             // Get the first file (you can also handle multiple)
             if (file == null)
             {
-                UploadResult = "No file was selected.";
-                return "abc";
+                return "error";
             }
 
             // Call your new method to upload to OpenAI
-            var response = await AssistantsApiService.UploadFileAsync(file);
+            var fileResponse = await AssistantsApiService.UploadFileAsync(file);
 
             // Save result so you can display it
-            UploadResult = response;
-            return response;
+
+            return fileResponse.Id;
         }
         catch (Exception ex)
         {

@@ -1,21 +1,22 @@
 ﻿using Newtonsoft.Json.Linq;
 
-namespace WhatsUpDocx.Documents;
+namespace WhatsUpDocx.Document;
 
 public class Document : BlossomEntity<string>
 {
-    public string Name { get; set; }
-    public string Description { get; set; }
-    public string Url { get; set; }
-    public string Analysis { get; set; }
+    public string? Name { get; set; }
+    public string? Description { get; set; }
+    public string? Analysis { get; set; }
+    public bool IsDeleted { get; set; }
 
 
     public Document() : base(Guid.NewGuid().ToString())
     {
     }
 
-    public void DefineName(string name)
+    public void DefineDocument(string name, string analysis)
     {
         Name = name;
+        Analysis = analysis;
     }
 }

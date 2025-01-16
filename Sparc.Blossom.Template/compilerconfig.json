@@ -14,5 +14,13 @@
   {
     "outputFile": "SolarCalculator/Estimates.razor.css",
     "inputFile": "SolarCalculator/Estimates.razor.scss"
+  },
+  {
+    "outputFile": "SolarPlant/SolarPlantCard.razor.css",
+    "inputFile": "SolarPlant/SolarPlantCard.razor.scss"
+  },
+  {
+    "outputFile": "SolarPlant/Index.razor.css",
+    "inputFile": "SolarPlant/Index.razor.scss"
   }
 ]

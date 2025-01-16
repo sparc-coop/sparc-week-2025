@@ -1,6 +1,6 @@
 using Sparc.Blossom.Girassol;
 using Sparc.Blossom.Girassol.Estimates;
-using Sparc.Blossom.Girassol.SolarPlant;
+using Sparc.Blossom.Girassol.SolarPlants;
 
 var builder = BlossomApplication.CreateBuilder(args);
 

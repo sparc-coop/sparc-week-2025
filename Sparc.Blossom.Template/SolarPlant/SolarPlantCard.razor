@@ -1,0 +1,13 @@
+<div class="solar-plant-card">
+    <img src="@SolarPlant.Images.First().Url" alt="Solar Plant Image" class="solar-plant-image" />
+    <div class="solar-plant-details">
+        <h2>@SolarPlant.Name</h2>
+        <p>Location: @SolarPlant.Location</p>
+        <p>Capacity: @SolarPlant.CapacityMW.ToString("F2") MW</p>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public SolarPlant SolarPlant { get; set; }
+}

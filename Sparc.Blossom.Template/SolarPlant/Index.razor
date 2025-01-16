@@ -1,7 +1,19 @@
 ﻿@page "/solar-plants"
 
-<h3>Index</h3>
+<h3>Solar Plants</h3>
+
+<div class="solar-plant-list">
+    @foreach (var solarPlant in solarPlants)
+    {
+        <SolarPlantCard SolarPlant="solarPlant" />
+    }
+</div>
 
 @code {
+    private List<SolarPlant> solarPlants = new List<SolarPlant>();
 
+    protected override async Task OnInitializedAsync()
+    {
+        solarPlants = (await Api.SolarPlants.Filter(null, null, null, null, null, null, 1, 20)).ToList();
+    }
 }

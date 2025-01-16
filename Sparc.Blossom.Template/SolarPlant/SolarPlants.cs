@@ -1,4 +1,4 @@
-﻿namespace Sparc.Blossom.Girassol.SolarPlant;
+﻿namespace Sparc.Blossom.Girassol.SolarPlants;
 
 public class SolarPlants(BlossomAggregateOptions<SolarPlant> options) : BlossomAggregate<SolarPlant>(options)
 {

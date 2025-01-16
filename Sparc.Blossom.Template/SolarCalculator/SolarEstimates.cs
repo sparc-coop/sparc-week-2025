@@ -36,6 +36,6 @@ public class SolarEstimates(BlossomAggregateOptions<SolarEstimate> options) : Bl
         page ??= 1;
         perPage ??= 10;
 
-        return query.SkipTake((page.Value - 1) * perPage.Value, perPage.Value);
+        return query.OrderByDescending(x => x.CreatedDate).SkipTake((page.Value - 1) * perPage.Value, perPage.Value);
     }
 }

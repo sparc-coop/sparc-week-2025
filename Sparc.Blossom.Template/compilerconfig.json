@@ -10,5 +10,9 @@
   {
     "outputFile": "wwwroot/app.css",
     "inputFile": "Html.scss"
+  },
+  {
+    "outputFile": "SolarCalculator/Estimates.razor.css",
+    "inputFile": "SolarCalculator/Estimates.razor.scss"
   }
 ]

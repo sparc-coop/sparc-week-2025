@@ -2,33 +2,84 @@
 
 <h3>Estimates</h3>
 
-<table>
+<form>
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" id="email" @bind="searchEmail">
+        </div>
+        <div class="form-group col-md-3">
+            <label for="type">Type</label>
+            <select class="form-control" id="type" @bind="searchType">
+                <option value="">Select Type</option>
+                <option value="Residential">Residential</option>
+                <option value="Commercial">Commercial</option>
+            </select>
+        </div>
+        <div class="form-group col-md-3">
+            <label for="avgBill">Avg Monthly Electricity Bill</label>
+            <input type="number" class="form-control" id="avgBill" @bind="searchAvgBill">
+        </div>
+    </div>
+    <button type="button" class="btn btn-primary" @onclick="SearchEstimates">Search</button>
+</form>
+
+<table class="table">
     <thead>
         <tr>
+            <th>Created Date</th>
             <th>Email</th>
             <th>Address</th>
             <th>Type</th>
-            <th>Avg Monthly Eletricity Bill</th>
+            <th>Avg Monthly Electricity Bill</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var estimate in estimates)
+        @foreach (var estimate in pagedEstimates)
         {
-            <tr>
-                <td>@estimate.Email</td>
-                <td>@estimate.Address</td>
-                <td>@estimate.Type</td>
-                <td>@estimate.AvgMonthlyEletricityBill</td>
+            <tr>  
+               <td>@estimate.CreatedDate.ToShortDateString()</td>
+               <td>@estimate.Email</td>  
+               <td>@estimate.Address</td>  
+               <td>@estimate.Type</td>  
+               <td>@estimate.AvgMonthlyElectricityBill.ToString("F2")</td> 
             </tr>
         }
     </tbody>
 </table>
 
+<Pagination 
+    TotalItems="totalEstimates" 
+    ItemsPerPage="itemsPerPage" 
+    CurrentPage="currentPage" 
+    OnPageChanged="LoadEstimates" />
+
 @code {
-    private List<SolarEstimate> estimates = new List<SolarEstimate>();
+    private List<SolarEstimate> pagedEstimates = new List<SolarEstimate>();
+    private int totalEstimates;
+    private int itemsPerPage = 10;
+    private int currentPage = 1;
+
+    private string searchEmail;
+    private string searchAddress;
+    private string searchType;
+    private double? searchAvgBill;
 
     protected override async Task OnInitializedAsync()
     {
-        estimates = (await Api.SolarEstimates.Filter(null, null, null, null, null, null)).ToList();
+        totalEstimates = (await Api.SolarEstimates.All()).Count();
+        await LoadEstimates(currentPage);
+    }
+
+    private async Task LoadEstimates(int page)
+    {
+        currentPage = page;
+        pagedEstimates = (await Api.SolarEstimates.Filter(searchEmail, searchType, searchAvgBill.HasValue ? searchAvgBill - 10 : null, searchAvgBill.HasValue ? searchAvgBill + 10 : null, currentPage, itemsPerPage)).ToList();
+    }
+
+    private async Task SearchEstimates()
+    {
+        currentPage = 1;
+        await LoadEstimates(currentPage);
     }
 }

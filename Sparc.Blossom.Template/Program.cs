@@ -1,4 +1,6 @@
 using Sparc.Blossom.Girassol;
+using Sparc.Blossom.Girassol.Estimates;
+using Sparc.Blossom.Girassol.SolarPlant;
 
 var builder = BlossomApplication.CreateBuilder(args);
 
@@ -9,6 +11,11 @@ using var scope = app.Services.CreateScope();
 var forecastRepository = scope.ServiceProvider.GetRequiredService<IRepository<Forecast>>();
 await forecastRepository.AddAsync(Forecast.Generate(60));
 
-//TODO generate plants and estimates
+var estimateRepository = scope.ServiceProvider.GetRequiredService<IRepository<SolarEstimate>>();
+await estimateRepository.AddAsync(SolarEstimate.Generate(60));
+
+var solarPlantRepository = scope.ServiceProvider.GetRequiredService<IRepository<SolarPlant>>();
+await solarPlantRepository.AddAsync(SolarPlant.Generate(60));
 
 await app.RunAsync<Html>();
+ 

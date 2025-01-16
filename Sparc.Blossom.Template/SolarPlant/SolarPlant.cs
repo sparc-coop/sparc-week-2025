@@ -16,4 +16,9 @@ public class SolarPlant : BlossomEntity<string>
         CommissionedDate = commissionedDate;
         Owner = owner;
     }
+
+    internal static SolarPlant Generate(int v)
+    {
+        return null;
+    }
 }

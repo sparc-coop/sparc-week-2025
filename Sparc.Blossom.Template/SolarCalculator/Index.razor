@@ -26,7 +26,7 @@
     </div>
     <div>
         <label for="avgMonthlyEletricityBill">Avg Monthly Electricity Bill:</label>
-        <InputNumber id="avgMonthlyEletricityBill" @bind-Value="newEstimate.AvgMonthlyEletricityBill" />
+        <InputNumber id="avgMonthlyEletricityBill" @bind-Value="newEstimate.AvgMonthlyElectricityBill" />
     </div>
     <button type="submit">Submit</button>
 </EditForm>
@@ -48,7 +48,7 @@
 
     private async void HandleValidSubmit()
     {
-        await Api.SolarEstimates.Create(newEstimate.Email, newEstimate.Address, newEstimate.Type, newEstimate.AvgMonthlyEletricityBill);
+        await Api.SolarEstimates.Create(newEstimate.Email, newEstimate.Address, newEstimate.Type, newEstimate.AvgMonthlyElectricityBill);
     }
 
     private async Task LoadCurrentAddressAsync()

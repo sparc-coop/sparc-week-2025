@@ -2,6 +2,7 @@
 
 public class SolarEstimates(BlossomAggregateOptions<SolarEstimate> options) : BlossomAggregate<SolarEstimate>(options)
 {
+    public BlossomQuery<SolarEstimate> All() => Query();
     public BlossomQuery<SolarEstimate> Filter(
         string? email = null,
         string? type = null,
@@ -14,7 +15,7 @@ public class SolarEstimates(BlossomAggregateOptions<SolarEstimate> options) : Bl
 
         if (!string.IsNullOrEmpty(email))
         {
-            query = query.Where(x => x.Email.Contains(email));
+            query = query.Where(x => x.Email.ToLowerInvariant().Contains(email.ToLowerInvariant()));
         }
 
         if (!string.IsNullOrEmpty(type))
@@ -24,17 +25,17 @@ public class SolarEstimates(BlossomAggregateOptions<SolarEstimate> options) : Bl
 
         if (minBill.HasValue)
         {
-            query = query.Where(x => x.AvgMonthlyEletricityBill >= minBill.Value);
+            query = query.Where(x => x.AvgMonthlyElectricityBill >= minBill.Value);
         }
 
         if (maxBill.HasValue)
         {
-            query = query.Where(x => x.AvgMonthlyEletricityBill <= maxBill.Value);
+            query = query.Where(x => x.AvgMonthlyElectricityBill <= maxBill.Value);
         }
 
         page ??= 1;
         perPage ??= 10;
 
-        return query.SkipTake(page.Value * perPage.Value, perPage.Value); ;
+        return query.SkipTake((page.Value - 1) * perPage.Value, perPage.Value);
     }
 }

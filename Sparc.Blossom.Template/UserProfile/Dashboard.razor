@@ -8,7 +8,7 @@
         <p>Select a period:</p>
         @foreach (var period in mentor.AvailableTimes)
         {
-            <button @* @onclick="() => SelectPeriod(period)" *@>@period</button>
+            <button @onclick="() => SelectPeriod(period)">@period</button>
         }
     </div>
 
@@ -29,7 +29,7 @@
     }
 }
 
-<button @onclick="ConfirmAppointment" disabled="@(!canConfirm)">Confirm Appointment</button>
+<button class="confirm-btn" @onclick="ConfirmAppointment" disabled="@(!canConfirm)">Confirm Appointment</button>
 
 <div class="instructions">
     <h3>How to Prepare for Your First Meeting</h3>
@@ -61,26 +61,24 @@
             return;
         }
 
-        var mentorId = MentorService.SelectedMentorId;
+        var mentorId = MentorService.SelectedMentorId;         
 
-        var mentor = await Api.Mentors.GetMentorByUserId(mentorId); 
+        mentor = (await Api.Mentors.GetMentorByUserId(mentorId)).FirstOrDefault();
 
         if (mentor == null)
         {
             Nav.NavigateTo("/mentors");
-        }
-
-        // var period = await Api.Mentors.GetMentorAvailableTimes(mentorId);
+        }        
     }
 
-    // private void SelectPeriod(string period)
-    // {
-    //     selectedPeriod = period;
+    private void SelectPeriod(string period)
+    {
+        selectedPeriod = period;
 
-    //     var tempSlots = mentor.GetTimeSlots(period);
+        var tempSlots = mentor.GetTimeSlots(period);
 
-    //     availableSlots = tempSlots;
-    // }
+        // availableSlots = tempSlots;
+    }
 
     private void SelectTimeSlot(string slot)
     {
@@ -94,7 +92,5 @@
         {
             Console.WriteLine($"Appointment confirmed: {selectedSlot} with {mentor.User.FullName}");
         }
-    }
-
-   
+    }   
 }

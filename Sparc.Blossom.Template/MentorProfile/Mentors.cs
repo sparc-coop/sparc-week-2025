@@ -16,11 +16,4 @@ public class Mentors(BlossomAggregateOptions<Mentor> options) : BlossomAggregate
         return Query().Where(mentor => mentor.Expertise.Any(expertise => interests.Contains(expertise))
         && mentor.UserId != currentUserId);
     }
-
-    public BlossomQuery<Mentor> GetMentorAvailableTimes(string selectedMentorId)
-    {
-        return Query()
-            .Where(mentor => mentor.UserId == selectedMentorId)
-            .Include(mentor => mentor.AvailableTimes);            
-    }
 }
